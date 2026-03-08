@@ -1,0 +1,5239 @@
+package com.phoenix.browser;
+
+import android.app.Activity;
+import android.app.DownloadManager;
+import android.app.SearchManager;
+import android.os.Bundle;
+import android.os.Environment;
+import android.webkit.*;
+import android.widget.*;
+import android.view.*;
+import android.graphics.*;
+import android.graphics.drawable.*;
+import android.animation.*;
+import android.content.*;
+import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import java.util.*;
+import android.os.Handler;
+import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.EditorInfo;
+import android.content.res.ColorStateList;
+import android.text.TextUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.os.Vibrator;
+import android.content.SharedPreferences;
+import android.view.animation.*;
+import android.os.Build;
+import android.content.ClipboardManager;
+import android.content.ClipData;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.io.InputStream;
+import android.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.SecureRandom;
+import java.security.MessageDigest;
+import android.content.pm.PackageManager;
+import java.io.ByteArrayOutputStream;
+import java.util.regex.Pattern;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import android.speech.RecognizerIntent;
+import android.print.PrintManager;
+import android.print.PrintDocumentAdapter;
+import android.content.res.Configuration;
+import android.os.Message;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+
+    // ========== LOCALIZATION ==========
+    private static class Strings {
+        static String appName = "Phoenix Pro";
+        static String search = "Поиск";
+        static String searchOrUrl = "Поиск или введите URL";
+        static String searchWeb = "Искать в интернете...";
+        static String loading = "Загрузка...";
+        static String newTab = "Новая вкладка";
+        static String home = "Главная";
+        static String cancel = "Отмена";
+        static String save = "Сохранить";
+        static String delete = "Удалить";
+        static String close = "Закрыть";
+        static String ok = "ОК";
+        static String yes = "Да";
+        static String no = "Нет";
+        static String add = "Добавить";
+        static String edit = "Редактировать";
+        static String share = "Поделиться";
+        static String copy = "Копировать";
+        static String paste = "Вставить";
+        static String open = "Открыть";
+        static String settings = "Настройки";
+        static String done = "Готово";
+        static String back = "Назад";
+        static String forward = "Вперед";
+        static String refresh = "Обновить";
+        static String stop = "Стоп";
+        static String goHome = "На главную";
+        static String tabs = "Вкладки";
+        static String closeTab = "Закрыть вкладку";
+        static String closeOtherTabs = "Закрыть другие вкладки";
+        static String closeAllTabs = "Закрыть все вкладки";
+        static String duplicateTab = "Дублировать";
+        static String tabOptions = "Опции вкладки";
+        static String cantCloseLastTab = "Нельзя закрыть последнюю вкладку";
+        static String menu = "Меню";
+        static String findOnPage = "Найти на странице";
+        static String sharePage = "Поделиться страницей";
+        static String readerMode = "Режим чтения";
+        static String viewSource = "Исходный код";
+        static String savePage = "Сохранить страницу";
+        static String downloads = "Загрузки";
+        static String history = "История";
+        static String passwords = "Пароли";
+        static String statistics = "Статистика";
+        static String printPage = "Печать страницы";
+        static String translatePage = "Перевести страницу";
+        static String voiceSearch = "Голосовой поиск";
+        static String screenshot = "Скриншот";
+        static String fullscreen = "Полный экран";
+        static String incognitoMode = "Режим инкогнито";
+        static String desktopMode = "Версия для ПК";
+        static String nightMode = "Ночной режим";
+        static String turboMode = "Турбо режим";
+        static String textOnlyMode = "Только текст";
+        static String incognitoOn = "Инкогнито ВКЛ";
+        static String incognitoOff = "Инкогнито ВЫКЛ";
+        static String turboOn = "Турбо ВКЛ";
+        static String turboOff = "Турбо ВЫКЛ";
+        static String nightModeOn = "Ночной режим ВКЛ";
+        static String nightModeOff = "Ночной режим ВЫКЛ";
+        static String readerModeOn = "Режим чтения ВКЛ";
+        static String readerModeOff = "Режим чтения ВЫКЛ";
+        static String bookmarks = "Закладки";
+        static String addBookmark = "Добавить закладку";
+        static String removeBookmark = "Удалить закладку";
+        static String bookmarkAdded = "Закладка добавлена";
+        static String bookmarkRemoved = "Закладка удалена";
+        static String noBookmarks = "Нет закладок\n\nНажмите на звездочку чтобы добавить";
+        static String clearHistory = "Очистить историю";
+        static String historyCleared = "История очищена";
+        static String noHistory = "История пуста";
+        static String adblock = "Блокировка рекламы";
+        static String adblockPro = "AdBlock Pro";
+        static String adsBlocked = "Реклама заблокирована";
+        static String trackersBlocked = "Трекеры заблокированы";
+        static String dataSaved = "Сэкономлено данных";
+        static String blockedThisSession = "заблокировано за сессию";
+        static String enableAdblock = "Включить AdBlock";
+        static String blockTrackers = "Блокировать трекеры";
+        static String blockCookieBanners = "Блокировать баннеры cookie";
+        static String blockPopups = "Блокировать всплывающие окна";
+        static String blockAutoplay = "Блокировать автовоспроизведение";
+        static String customFilters = "Пользовательские фильтры";
+        static String whitelist = "Белый список";
+        static String addRule = "Добавить правило";
+        static String siteRules = "Правила для сайта";
+        static String resetStats = "Сбросить статистику";
+        static String statsReset = "Статистика сброшена";
+        static String advancedSettings = "Расширенные настройки";
+        static String ruleAdded = "Правило добавлено";
+        static String ruleRemoved = "Правило удалено";
+        static String addedToWhitelist = "Добавлено в белый список";
+        static String removedFromWhitelist = "Удалено из белого списка";
+        static String noCustomFilters = "Нет пользовательских фильтров";
+        static String noWhitelistedSites = "Белый список пуст";
+        static String filterAdded = "Фильтр добавлен";
+        static String noRulesForSite = "Нет правил для этого сайта";
+        static String enterElementToBlock = "Введите элемент для блокировки (CSS селектор или часть URL):\n\nПримеры:\n##.ad-banner\n##div[class*=\"promo\"]\nadserver.com";
+        static String security = "Безопасность";
+        static String securityPrivacy = "Безопасность и приватность";
+        static String protectionsActive = "защит активно";
+        static String httpsOnly = "Только HTTPS";
+        static String blockAds = "Блокировать рекламу";
+        static String blockFingerprinting = "Защита от отслеживания";
+        static String blockWebRTC = "Блокировать WebRTC";
+        static String safeBrowsing = "Безопасный просмотр";
+        static String blockedSites = "Заблокированные сайты";
+        static String masterPassword = "Мастер-пароль";
+        static String parentalControl = "Родительский контроль";
+        static String sslError = "Ошибка SSL - соединение заблокировано";
+        static String siteBlocked = "Этот сайт заблокирован";
+        static String connectionSecure = "Соединение защищено";
+        static String connectionNotSecure = "Соединение не защищено";
+        static String noBlockedSites = "Нет заблокированных сайтов";
+        static String siteBlockedAdded = "Сайт заблокирован";
+        static String savePasswords = "Сохранять пароли";
+        static String savedPasswords = "Сохраненные пароли";
+        static String noSavedPasswords = "Нет сохраненных паролей";
+        static String savePassword = "Сохранить пароль?";
+        static String saveLoginFor = "Сохранить данные для входа на";
+        static String username = "Имя пользователя";
+        static String password = "Пароль";
+        static String notNow = "Не сейчас";
+        static String passwordSaved = "Пароль сохранен";
+        static String passwordCopied = "Пароль скопирован";
+        static String passwordDeleted = "Пароль удален";
+        static String deleteAllPasswords = "Удалить все пароли";
+        static String allPasswordsDeleted = "Все пароли удалены";
+        static String setMasterPassword = "Установить мастер-пароль";
+        static String enterMasterPassword = "Введите мастер-пароль";
+        static String confirmPassword = "Подтвердите пароль";
+        static String masterPasswordHint = "Установите мастер-пароль для шифрования данных.\nОн потребуется при каждом запуске.";
+        static String passwordTooShort = "Пароль слишком короткий (мин. 4 символа)";
+        static String passwordsDontMatch = "Пароли не совпадают";
+        static String masterPasswordSet = "Мастер-пароль установлен";
+        static String removeMasterPassword = "Удалить мастер-пароль";
+        static String masterPasswordRemoved = "Мастер-пароль удален";
+        static String wrongPassword = "Неверный пароль";
+        static String phoenixLocked = "Phoenix Pro заблокирован";
+        static String unlock = "Разблокировать";
+        static String themes = "Темы";
+        static String[] themeNames = {"Фиолетовая ночь", "Синий океан", "Зеленый лес", "Рубиновый красный", "Темный режим", "Светлый режим", "AMOLED черный", "Глубокий океан"};
+        static String textSize = "Размер текста";
+        static String searchEngine = "Поисковая система";
+        static String javascript = "JavaScript";
+        static String loadImages = "Загружать изображения";
+        static String swipeNavigation = "Свайп навигация";
+        static String openLinksInApps = "Открывать ссылки в приложениях";
+        static String confirmExit = "Подтверждать выход";
+        static String autoSuggestions = "Автоподсказки";
+        static String customUserAgent = "User-Agent";
+        static String clearCache = "Очистить кэш";
+        static String clearCookies = "Очистить cookie";
+        static String clearAllData = "Очистить все данные";
+        static String cacheCleared = "Кэш очищен";
+        static String cookiesCleared = "Cookie очищены";
+        static String allDataCleared = "Все данные очищены";
+        static String userAgentSaved = "User-Agent сохранен";
+        static String userAgentHint = "Оставьте пустым для использования стандартного.";
+        static String reset = "Сбросить";
+        static String pagesLoaded = "Страниц загружено";
+        static String browsingTime = "Время просмотра";
+        static String thisSession = "Эта сессия";
+        static String tabsOpened = "Открыто вкладок";
+        static String resetAllStats = "Сбросить всю статистику";
+        static String downloading = "Загрузка";
+        static String downloadComplete = "Загрузка завершена";
+        static String downloadFailed = "Ошибка загрузки";
+        static String openDownloadsFolder = "Открыть папку загрузок";
+        static String downloadsHint = "Загруженные файлы сохраняются в папку Downloads";
+        static String cannotOpenFolder = "Не удалось открыть папку";
+        static String findOnPageHint = "Найти на странице...";
+        static String urlOptions = "Опции URL";
+        static String copyUrl = "Копировать URL";
+        static String urlCopied = "URL скопирован";
+        static String openInNewTab = "Открыть в новой вкладке";
+        static String pageSource = "Исходный код страницы";
+        static String sourceCopied = "Исходный код скопирован";
+        static String nothingToView = "Нечего просматривать";
+        static String pageSaved = "Страница сохранена";
+        static String saveFailed = "Ошибка сохранения";
+        static String nothingToSave = "Нечего сохранять";
+        static String securePrivateFast = "Безопасный - Быстрый - Приватный";
+        static String maxProtectionActive = "Максимальная защита активна";
+        static String quickActions = "Быстрые действия";
+        static String cleanReading = "Чистое чтение";
+        static String reduceEyeStrain = "Снижает нагрузку на глаза";
+        static String manageFiles = "Управление файлами";
+        static String usageStats = "Статистика использования";
+        static String noInternet = "Нет интернета";
+        static String cannotOpenLink = "Не удалось открыть ссылку";
+        static String error = "Ошибка";
+        static String pressBackToExit = "Нажмите назад еще раз для выхода";
+        static String bearRider = "Медведь-гонщик";
+        static String gameOver = "ИГРА ОКОНЧЕНА";
+        static String score = "Счет";
+        static String best = "Лучший";
+        static String tapToStart = "Нажмите чтобы начать";
+        static String tapToRetry = "Нажмите чтобы повторить";
+        static String speak = "Говорите...";
+        static String voiceNotSupported = "Голосовой поиск не поддерживается";
+        static String voiceError = "Ошибка распознавания";
+        static String screenshotSaved = "Скриншот сохранен";
+        static String screenshotFailed = "Не удалось сделать скриншот";
+        static String print = "Печать";
+        static String translate = "Перевести";
+        static String pageError = "Ошибка загрузки страницы";
+        static String pageReloading = "Перезагрузка...";
+    }
+
+    // ========== UI COMPONENTS ==========
+    private FrameLayout root;
+    private LinearLayout mainLayout, toolbar, tabStrip, bottomNav;
+    private FrameLayout content, overlay, dialog, fullscreenContainer;
+    private EditText urlInput;
+    private ProgressBar loadBar;
+    private ScrollView homeView;
+    private ImageView lockIcon, bookmarkIcon, adBlockIcon;
+    private LinearLayout suggestions;
+    private View customView;
+    private WebChromeClient.CustomViewCallback customViewCallback;
+    private BearGame bearGame;
+    private FrameLayout findBar;
+    private EditText findInput;
+    private TextView findCount;
+    private GestureDetector gestureDetector;
+
+    // ========== DATA ==========
+    private ArrayList<Tab> tabs = new ArrayList<>();
+    private LinkedHashSet<String> marks = new LinkedHashSet<>();
+    private ArrayList<HistoryItem> hist = new ArrayList<>();
+    private HashMap<String, SavedPassword> passwords = new HashMap<>();
+    private HashSet<String> blockedSites = new HashSet<>();
+    private ArrayList<String> customFilters = new ArrayList<>();
+    private ArrayList<DownloadItem> downloads = new ArrayList<>();
+    private int currentTab = 0, tabId = 0;
+
+    // ========== SETTINGS ==========
+    private boolean httpsForce = true, blockAds = true, blockTrack = true;
+    private boolean blockFinger = true, blockRTC = true, safeMode = true;
+    private boolean incognito = false, darkPage = false, desktop = false;
+    private boolean enableJS = true, enableImages = true;
+    private boolean confirmExit = true, autoSuggest = true;
+    private boolean savePasswords = true, openLinksInApps = true;
+    private boolean turboMode = false, readerMode = false;
+    private boolean masterPasswordEnabled = false;
+    private boolean blockPopups = true, blockCookieBanners = true;
+    private boolean blockAutoplay = true, textOnlyMode = false;
+    private boolean swipeNavigation = true, parentalControl = false;
+    private boolean isFullscreen = false;
+    private String parentalPin = "";
+    private int textSize = 100;
+    private String searchEngine = "google";
+    private String customUserAgent = "";
+    private String masterPasswordHash = "";
+    private int highScore = 0;
+
+    // ========== STATISTICS ==========
+    private long adsBlocked = 0, trackersBlocked = 0, dataSaved = 0;
+    private long sessionAdsBlocked = 0, pagesLoaded = 0, browsingTime = 0;
+    private long sessionStartTime = 0;
+
+    // ========== THEME ==========
+    private int theme = 0;
+    private int[][] themes = {
+        {0xFF0D0D12, 0xFF16161F, 0xFF1E1E2A, 0xFFFFFFFF, 0xFF8B8B9E, 0xFF7C3AED, 0xFF06B6D4},
+        {0xFF0A1929, 0xFF0D2137, 0xFF132F4C, 0xFFFFFFFF, 0xFF5090D3, 0xFF2196F3, 0xFF00BCD4},
+        {0xFF0D1512, 0xFF121E1A, 0xFF1A2E26, 0xFFFFFFFF, 0xFF6B8F80, 0xFF10B981, 0xFF14B8A6},
+        {0xFF120D0D, 0xFF1C1416, 0xFF2A1B1E, 0xFFFFFFFF, 0xFFA08080, 0xFFEF4444, 0xFFF97316},
+        {0xFF000000, 0xFF0A0A0A, 0xFF141414, 0xFFFFFFFF, 0xFF666666, 0xFFFFFFFF, 0xFF888888},
+        {0xFFF5F5F5, 0xFFFFFFFF, 0xFFE8E8E8, 0xFF1A1A1A, 0xFF666666, 0xFF2563EB, 0xFF0891B2},
+        {0xFF000000, 0xFF000000, 0xFF0A0A0A, 0xFFFFFFFF, 0xFF555555, 0xFFBB86FC, 0xFF03DAC6},
+        {0xFF0A1628, 0xFF0F1D32, 0xFF152540, 0xFFE0F2FE, 0xFF7DD3FC, 0xFF0EA5E9, 0xFF22D3EE}
+    };
+    private int cBg, cCard, cLight, cText, cDim, cPrimary, cAccent;
+
+    // ========== SYSTEM ==========
+    private Handler handler = new Handler();
+    private Vibrator vib;
+    private SharedPreferences prefs;
+    private CryptoEngine crypto;
+    private AdBlockEngine adBlock;
+    private ValueCallback<Uri[]> uploadCallback;
+    private long lastBackPress = 0;
+    private ClipboardManager clipboard;
+    private DownloadManager downloadManager;
+    private boolean isLocked = false;
+    private boolean isInitialized = false;
+
+    // ========== CONSTANTS ==========
+    private static final int REQUEST_VOICE = 1002;
+    private static final int REQUEST_FILE = 1001;
+    private static final int REQUEST_PERMISSIONS = 1003;
+    private static final int REQUEST_AUDIO = 1004;
+    
+    // ========== ICON TYPES ==========
+    private static final int IC_BACK = 0, IC_FORWARD = 1, IC_REFRESH = 2, IC_HOME = 3;
+    private static final int IC_SHIELD = 4, IC_MENU = 5, IC_PLUS = 6, IC_BOOKMARK = 7;
+    private static final int IC_CLOCK = 8, IC_PALETTE = 9, IC_GEAR = 10, IC_SEARCH = 11;
+    private static final int IC_SHIELD_CHECK = 12, IC_CLOSE = 13, IC_CHECK = 14, IC_GLOBE = 15;
+    private static final int IC_UNLOCK = 16, IC_BOOKMARK_FILL = 17, IC_KEY = 18, IC_ADBLOCK = 19;
+    private static final int IC_ARROW_UP = 20, IC_ARROW_DOWN = 21, IC_COPY = 22, IC_SHARE = 23;
+    private static final int IC_DOWNLOAD = 24, IC_CODE = 25, IC_TEXT = 26, IC_IMAGE = 27;
+    private static final int IC_VIDEO = 28, IC_LOCK = 29, IC_STAR = 30, IC_TRASH = 31;
+    private static final int IC_EDIT = 32, IC_SAVE = 33, IC_FOLDER = 34, IC_LINK = 35;
+    private static final int IC_EYE = 36, IC_EYE_OFF = 37, IC_MOON = 38, IC_SUN = 39;
+    private static final int IC_ZAP = 40, IC_FILTER = 41, IC_LAYERS = 42, IC_STATS = 43;
+    private static final int IC_USER = 44, IC_INFO = 45, IC_WARNING = 46, IC_BLOCK = 47;
+    private static final int IC_MIC = 48, IC_PRINT = 49, IC_CAMERA = 50, IC_TRANSLATE = 51;
+    private static final int IC_FULLSCREEN = 52;
+
+    // ========== CHROME USER AGENTS ==========
+    private static final String CHROME_UA_MOBILE = "Mozilla/5.0 (Linux; Android %s; %s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.230 Mobile Safari/537.36";
+    private static final String CHROME_UA_DESKTOP = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.230 Safari/537.36";
+
+    @Override
+    protected void onCreate(Bundle b) {
+        super.onCreate(b);
+        try {
+            Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {
+                try {
+                    save();
+                } catch (Exception e) {}
+            });
+            
+            fullscreen();
+            
+            vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            prefs = getSharedPreferences("phoenix_pro", MODE_PRIVATE);
+            clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+            
+            crypto = new CryptoEngine();
+            adBlock = new AdBlockEngine();
+            
+            sessionStartTime = System.currentTimeMillis();
+            
+            load();
+            applyTheme();
+            initGestures();
+            
+            if (masterPasswordEnabled && !masterPasswordHash.isEmpty()) {
+                showMasterPasswordDialog(true);
+            } else {
+                initBrowser();
+            }
+        } catch (Exception e) {
+            initBrowser();
+        }
+    }
+
+    private void initGestures() {
+        try {
+            gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+                private static final int SWIPE_THRESHOLD = 100;
+                private static final int SWIPE_VELOCITY = 100;
+                
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2, float vX, float vY) {
+                    if (!swipeNavigation || e1 == null || e2 == null) return false;
+                    try {
+                        float diffX = e2.getX() - e1.getX();
+                        float diffY = e2.getY() - e1.getY();
+                        
+                        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(vX) > SWIPE_VELOCITY) {
+                            if (diffX > 0) {
+                                back();
+                                return true;
+                            } else {
+                                fwd();
+                                return true;
+                            }
+                        }
+                    } catch (Exception ex) {}
+                    return false;
+                }
+            });
+        } catch (Exception e) {}
+    }
+
+    private void initBrowser() {
+        isLocked = false;
+        isInitialized = true;
+        build();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (!isLocked && isInitialized) handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        try {
+            if (intent == null) {
+                if (tabs.isEmpty()) newTab("home", Strings.home);
+                return;
+            }
+            String action = intent.getAction();
+            Uri data = intent.getData();
+            
+            if (Intent.ACTION_VIEW.equals(action) && data != null) {
+                String url = data.toString();
+                if (tabs.isEmpty()) newTab(url, Strings.loading);
+                else go(url);
+            } else if (Intent.ACTION_SEND.equals(action)) {
+                String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+                if (text != null && !text.isEmpty()) {
+                    if (tabs.isEmpty()) newTab("home", Strings.home);
+                    go(text);
+                } else {
+                    if (tabs.isEmpty()) newTab("home", Strings.home);
+                }
+            } else if (Intent.ACTION_WEB_SEARCH.equals(action)) {
+                String query = intent.getStringExtra(SearchManager.QUERY);
+                if (query != null && !query.isEmpty()) {
+                    if (tabs.isEmpty()) newTab("home", Strings.home);
+                    search(query);
+                } else {
+                    if (tabs.isEmpty()) newTab("home", Strings.home);
+                }
+            } else {
+                if (tabs.isEmpty()) newTab("home", Strings.home);
+            }
+        } catch (Exception e) {
+            if (tabs.isEmpty()) newTab("home", Strings.home);
+        }
+    }
+
+    // ========== CRYPTO ENGINE ==========
+    
+    private class CryptoEngine {
+        private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
+        private static final int IV_SIZE = 16;
+        private static final int ITERATIONS = 10000;
+        private SecretKeySpec masterKey;
+        private SecureRandom random = new SecureRandom();
+        
+        void initWithPassword(String password) {
+            try {
+                byte[] salt = getSalt();
+                PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, 256);
+                SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+                byte[] key = factory.generateSecret(spec).getEncoded();
+                masterKey = new SecretKeySpec(key, "AES");
+            } catch (Exception e) {
+                try {
+                    PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), getSalt(), ITERATIONS, 256);
+                    SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+                    byte[] key = factory.generateSecret(spec).getEncoded();
+                    masterKey = new SecretKeySpec(key, "AES");
+                } catch (Exception e2) {
+                    masterKey = new SecretKeySpec(padKey(password), "AES");
+                }
+            }
+        }
+        
+        void initDefault() {
+            try {
+                String deviceId = Build.SERIAL + Build.FINGERPRINT + "PhoenixPro2024";
+                masterKey = new SecretKeySpec(padKey(deviceId), "AES");
+            } catch (Exception e) {
+                masterKey = new SecretKeySpec(padKey("PhoenixProDefault"), "AES");
+            }
+        }
+        
+        private byte[] getSalt() {
+            try {
+                String saltStr = prefs.getString("crypto_salt", null);
+                if (saltStr == null) {
+                    byte[] salt = new byte[16];
+                    random.nextBytes(salt);
+                    prefs.edit().putString("crypto_salt", Base64.encodeToString(salt, Base64.NO_WRAP)).apply();
+                    return salt;
+                }
+                return Base64.decode(saltStr, Base64.NO_WRAP);
+            } catch (Exception e) {
+                return "PhoenixProSalt16".getBytes();
+            }
+        }
+        
+        private byte[] padKey(String key) {
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                return digest.digest(key.getBytes("UTF-8"));
+            } catch (Exception e) {
+                byte[] padded = new byte[32];
+                byte[] keyBytes = key.getBytes();
+                System.arraycopy(keyBytes, 0, padded, 0, Math.min(keyBytes.length, 32));
+                return padded;
+            }
+        }
+        
+        String encrypt(String data) {
+            if (data == null || data.isEmpty()) return "";
+            if (masterKey == null) initDefault();
+            try {
+                byte[] iv = new byte[IV_SIZE];
+                random.nextBytes(iv);
+                IvParameterSpec ivSpec = new IvParameterSpec(iv);
+                Cipher cipher = Cipher.getInstance(ALGORITHM);
+                cipher.init(Cipher.ENCRYPT_MODE, masterKey, ivSpec);
+                byte[] encrypted = cipher.doFinal(data.getBytes("UTF-8"));
+                byte[] combined = new byte[iv.length + encrypted.length];
+                System.arraycopy(iv, 0, combined, 0, iv.length);
+                System.arraycopy(encrypted, 0, combined, iv.length, encrypted.length);
+                return Base64.encodeToString(combined, Base64.NO_WRAP);
+            } catch (Exception e) {
+                return simpleObfuscate(data);
+            }
+        }
+        
+        String decrypt(String data) {
+            if (data == null || data.isEmpty()) return "";
+            if (masterKey == null) initDefault();
+            try {
+                byte[] combined = Base64.decode(data, Base64.NO_WRAP);
+                if (combined.length <= IV_SIZE) return simpleDeobfuscate(data);
+                byte[] iv = new byte[IV_SIZE];
+                byte[] encrypted = new byte[combined.length - IV_SIZE];
+                System.arraycopy(combined, 0, iv, 0, IV_SIZE);
+                System.arraycopy(combined, IV_SIZE, encrypted, 0, encrypted.length);
+                IvParameterSpec ivSpec = new IvParameterSpec(iv);
+                Cipher cipher = Cipher.getInstance(ALGORITHM);
+                cipher.init(Cipher.DECRYPT_MODE, masterKey, ivSpec);
+                return new String(cipher.doFinal(encrypted), "UTF-8");
+            } catch (Exception e) {
+                return simpleDeobfuscate(data);
+            }
+        }
+        
+        private String simpleObfuscate(String data) {
+            try {
+                byte[] bytes = data.getBytes("UTF-8");
+                byte[] key = "PhoenixProKey123".getBytes();
+                byte[] result = new byte[bytes.length];
+                for (int i = 0; i < bytes.length; i++) {
+                    result[i] = (byte) (bytes[i] ^ key[i % key.length]);
+                }
+                return Base64.encodeToString(result, Base64.NO_WRAP);
+            } catch (Exception e) { return data; }
+        }
+        
+        private String simpleDeobfuscate(String data) {
+            try {
+                byte[] bytes = Base64.decode(data, Base64.NO_WRAP);
+                byte[] key = "PhoenixProKey123".getBytes();
+                byte[] result = new byte[bytes.length];
+                for (int i = 0; i < bytes.length; i++) {
+                    result[i] = (byte) (bytes[i] ^ key[i % key.length]);
+                }
+                return new String(result, "UTF-8");
+            } catch (Exception e) { return data; }
+        }
+        
+        String hashPassword(String password) {
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-512");
+                digest.update(getSalt());
+                return Base64.encodeToString(digest.digest(password.getBytes("UTF-8")), Base64.NO_WRAP);
+            } catch (Exception e) { return password; }
+        }
+        
+        boolean verifyPassword(String password, String hash) {
+            try {
+                return hashPassword(password).equals(hash);
+            } catch (Exception e) {
+                return false;
+            }
+        }
+    }
+
+    // ========== ADBLOCK ENGINE ==========
+    
+    private class AdBlockEngine {
+        private HashSet<String> blockDomains = new HashSet<>();
+        private HashSet<Pattern> blockPatterns = new HashSet<>();
+        private HashMap<String, HashSet<String>> siteSpecificBlocks = new HashMap<>();
+        private HashSet<String> whitelist = new HashSet<>();
+        private HashSet<String> criticalWhitelist = new HashSet<>();
+        
+        AdBlockEngine() {
+            initDefaultLists();
+            initCriticalWhitelist();
+        }
+        
+        void initCriticalWhitelist() {
+            String[] critical = {
+                "arena.ai", "chat.openai.com", "chatgpt.com", "claude.ai", "anthropic.com",
+                "bard.google.com", "gemini.google.com", "copilot.microsoft.com", "bing.com/chat",
+                "perplexity.ai", "you.com", "phind.com", "poe.com", "character.ai",
+                "huggingface.co", "replicate.com", "midjourney.com", "stability.ai",
+                "openrouter.ai", "together.ai", "fireworks.ai", "groq.com", "mistral.ai",
+                "cohere.com", "ai21.com", "aleph-alpha.com", "inflection.ai",
+                "googleapis.com", "gstatic.com", "google.com", "cloudflare.com",
+                "jsdelivr.net", "unpkg.com", "cdnjs.cloudflare.com", "cdn.jsdelivr.net",
+                "fonts.googleapis.com", "fonts.gstatic.com",
+                "wss://", "ws://", "sse", "stream", "events", "realtime", "socket",
+                "api.", "/api/", "/v1/", "/v2/", "/graphql", "/ws", "/wss",
+                "stripe.com", "paypal.com", "checkout", "payment",
+                "captcha", "recaptcha", "hcaptcha", "turnstile",
+                "auth", "login", "signin", "oauth", "sso",
+                "youtube.com", "googlevideo.com", "ytimg.com",
+                "twitch.tv", "twitchcdn.net", "jtvnw.net",
+                "netflix.com", "nflxvideo.net", "nflximg.net",
+                "spotify.com", "scdn.co", "spotifycdn.com",
+                "discord.com", "discordapp.com", "discord.gg",
+                "telegram.org", "t.me", "web.telegram.org",
+                "whatsapp.com", "whatsapp.net", "web.whatsapp.com",
+                "instagram.com", "cdninstagram.com",
+                "facebook.com", "fbcdn.net", "fb.com",
+                "twitter.com", "x.com", "twimg.com",
+                "reddit.com", "redd.it", "redditstatic.com",
+                "github.com", "githubusercontent.com", "githubassets.com",
+                "stackoverflow.com", "stackexchange.com",
+                "notion.so", "notion-static.com",
+                "figma.com", "figmacdn.com",
+                "vercel.app", "vercel.com", "nextjs.org",
+                "netlify.app", "netlify.com",
+                "supabase.co", "supabase.com",
+                "firebase.google.com", "firebaseio.com", "firebaseapp.com"
+            };
+            for (String c : critical) criticalWhitelist.add(c.toLowerCase());
+        }
+        
+        void initDefaultLists() {
+            String[] adNetworks = {
+                "doubleclick.net", "googleadservices.com", "googlesyndication.com",
+                "googleads.g.doubleclick.net", "pagead2.googlesyndication.com",
+                "adnxs.com", "adsrvr.org", "admob.com", "moatads.com",
+                "rubiconproject.com", "pubmatic.com", "openx.net", "casalemedia.com",
+                "advertising.com", "adform.net", "criteo.com", "criteo.net",
+                "taboola.com", "outbrain.com", "amazon-adsystem.com",
+                "adcolony.com", "applovin.com", "chartboost.com", "vungle.com",
+                "inmobi.com", "smaato.com", "mopub.com", "unity3d.com/ads",
+                "popads.net", "popcash.net", "propellerads.com", "mgid.com",
+                "revcontent.com", "content.ad", "nativeads.com",
+                "adskeeper.com", "adsterra.com", "clickadu.com", "trafficjunky.com",
+                "exoclick.com", "juicyads.com", "plugrush.com", "trafficfactory.biz",
+                "hilltopads.net", "adcash.com", "bidvertiser.com", "clicksor.com",
+                "adf.ly", "sh.st", "bc.vc", "ouo.io", "adbooth.com"
+            };
+            
+            String[] trackers = {
+                "scorecardresearch.com", "quantserve.com", "quantcount.com",
+                "hotjar.com", "hotjar.io", "mouseflow.com", "crazyegg.com",
+                "fullstory.com", "logrocket.com", "smartlook.com", "inspectlet.com",
+                "mixpanel.com", "amplitude.com", "segment.io", "segment.com",
+                "heapanalytics.com", "kissmetrics.com", "optimizely.com"
+            };
+            
+            String[] annoyances = {
+                "cookiebot.com", "cookieconsent.com", "cookielaw.org",
+                "trustarc.com", "truste.com",
+                "onetrust.com", "usercentrics.com", "iubenda.com",
+                "onesignal.com", "pushengage.com", "pushwoosh.com"
+            };
+            
+            for (String d : adNetworks) blockDomains.add(d);
+            for (String d : trackers) blockDomains.add(d);
+            for (String d : annoyances) blockDomains.add(d);
+        }
+        
+        void addSiteRule(String domain, String rule) {
+            try {
+                if (domain == null || rule == null) return;
+                if (!siteSpecificBlocks.containsKey(domain)) {
+                    siteSpecificBlocks.put(domain, new HashSet<>());
+                }
+                siteSpecificBlocks.get(domain).add(rule);
+                saveSiteRules();
+            } catch (Exception e) {}
+        }
+        
+        void removeSiteRule(String domain, String rule) {
+            try {
+                if (siteSpecificBlocks.containsKey(domain)) {
+                    siteSpecificBlocks.get(domain).remove(rule);
+                    saveSiteRules();
+                }
+            } catch (Exception e) {}
+        }
+        
+        void addToWhitelist(String domain) { 
+            try { 
+                if (domain != null) {
+                    whitelist.add(domain.toLowerCase()); 
+                    saveWhitelist(); 
+                }
+            } catch (Exception e) {} 
+        }
+        
+        void removeFromWhitelist(String domain) { 
+            try { 
+                if (domain != null) {
+                    whitelist.remove(domain.toLowerCase()); 
+                    saveWhitelist(); 
+                }
+            } catch (Exception e) {} 
+        }
+        
+        boolean isWhitelisted(String url) {
+            if (url == null || url.isEmpty()) return false;
+            try { 
+                String lower = url.toLowerCase();
+                String host = new URL(url).getHost();
+                if (host != null) {
+                    host = host.toLowerCase();
+                    if (whitelist.contains(host)) return true;
+                    for (String w : whitelist) {
+                        if (host.contains(w) || w.contains(host)) return true;
+                    }
+                }
+            } catch (Exception e) {}
+            return false;
+        }
+        
+        boolean isCritical(String url) {
+            if (url == null || url.isEmpty()) return false;
+            try {
+                String lower = url.toLowerCase();
+                for (String c : criticalWhitelist) {
+                    if (lower.contains(c)) return true;
+                }
+                if (lower.contains("wss://") || lower.contains("ws://")) return true;
+                if (lower.contains("/api/") || lower.contains("/v1/") || lower.contains("/v2/")) return true;
+                if (lower.contains("/graphql") || lower.contains("/socket") || lower.contains("/stream")) return true;
+                if (lower.contains("event-stream") || lower.contains("text/event-stream")) return true;
+                if (lower.contains("application/json") || lower.contains("fetch")) return true;
+            } catch (Exception e) {}
+            return false;
+        }
+        
+        boolean shouldBlock(String url, String pageUrl) {
+            try {
+                if (!blockAds || url == null || url.isEmpty()) return false;
+                if (isCritical(url)) return false;
+                if (pageUrl != null && isWhitelisted(pageUrl)) return false;
+                if (pageUrl != null && isCritical(pageUrl)) return false;
+                
+                String lower = url.toLowerCase();
+                
+                if (lower.endsWith(".js") || lower.endsWith(".css") || lower.endsWith(".woff") || 
+                    lower.endsWith(".woff2") || lower.endsWith(".ttf") || lower.endsWith(".eot")) {
+                    return false;
+                }
+                
+                for (String blocked : blockDomains) {
+                    if (lower.contains(blocked)) {
+                        sessionAdsBlocked++; 
+                        adsBlocked++;
+                        return true;
+                    }
+                }
+                
+                if (pageUrl != null && !pageUrl.isEmpty()) {
+                    try {
+                        String pageDomain = new URL(pageUrl).getHost();
+                        if (pageDomain != null && siteSpecificBlocks.containsKey(pageDomain)) {
+                            HashSet<String> rules = siteSpecificBlocks.get(pageDomain);
+                            if (rules != null) {
+                                for (String rule : rules) {
+                                    if (rule != null && !rule.startsWith("##") && lower.contains(rule.toLowerCase())) {
+                                        sessionAdsBlocked++; 
+                                        adsBlocked++;
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {}
+                }
+                
+                for (String filter : customFilters) {
+                    if (filter != null && !filter.startsWith("##") && lower.contains(filter.toLowerCase())) {
+                        sessionAdsBlocked++; 
+                        adsBlocked++;
+                        return true;
+                    }
+                }
+            } catch (Exception e) {}
+            
+            return false;
+        }
+        
+        String getCosmeticFiltersJS(String domain) {
+            StringBuilder js = new StringBuilder("(function(){try{");
+            js.append("var hide=function(s){try{var els=document.querySelectorAll(s);for(var i=0;i<els.length;i++){els[i].style.display='none';els[i].style.visibility='hidden';}}catch(x){}};");
+            js.append("var sels='[class*=\"ad-\"],[class*=\"-ad\"],[class*=\"ads-\"],[id*=\"ad-\"],[id*=\"-ad\"],");
+            js.append("[class*=\"banner\"],[id*=\"banner\"],[class*=\"sponsor\"],[class*=\"promo\"],");
+            js.append("ins.adsbygoogle,.ad-container,.ad-wrapper,div[data-ad],.advertisement,.sponsored';");
+            js.append("setTimeout(function(){hide(sels);},100);");
+            js.append("setTimeout(function(){hide(sels);},1000);");
+            js.append("setTimeout(function(){hide(sels);},3000);");
+            if (blockCookieBanners) {
+                js.append("var cookie='[class*=\"cookie\"],[id*=\"cookie\"],[class*=\"consent\"],[id*=\"consent\"],");
+                js.append("[class*=\"gdpr\"],[id*=\"gdpr\"],.cc-window,.cc-banner,#onetrust-consent-sdk,");
+                js.append("[class*=\"cookie-banner\"],[class*=\"cookieBanner\"],[class*=\"cookie_banner\"]';");
+                js.append("setTimeout(function(){hide(cookie);document.body.style.overflow='auto';document.documentElement.style.overflow='auto';},500);");
+            }
+            if (domain != null && siteSpecificBlocks.containsKey(domain)) {
+                HashSet<String> rules = siteSpecificBlocks.get(domain);
+                if (rules != null) {
+                    for (String rule : rules) {
+                        if (rule != null && rule.startsWith("##")) {
+                            js.append("setTimeout(function(){hide('").append(rule.substring(2).replace("'", "\\'").replace("\\", "\\\\")).append("');},100);");
+                        }
+                    }
+                }
+            }
+            js.append("}catch(e){}})();");
+            return js.toString();
+        }
+        
+        void saveSiteRules() {
+            try {
+                HashSet<String> rules = new HashSet<>();
+                for (Map.Entry<String, HashSet<String>> e : siteSpecificBlocks.entrySet()) {
+                    if (e.getValue() != null) {
+                        for (String rule : e.getValue()) {
+                            rules.add(crypto.encrypt(e.getKey() + ":::" + rule));
+                        }
+                    }
+                }
+                prefs.edit().putStringSet("site_ad_rules", rules).apply();
+            } catch (Exception e) {}
+        }
+        
+        void loadSiteRules() {
+            try {
+                Set<String> rules = prefs.getStringSet("site_ad_rules", new HashSet<>());
+                for (String r : rules) {
+                    try {
+                        String[] parts = crypto.decrypt(r).split(":::");
+                        if (parts.length == 2) {
+                            if (!siteSpecificBlocks.containsKey(parts[0]))
+                                siteSpecificBlocks.put(parts[0], new HashSet<>());
+                            siteSpecificBlocks.get(parts[0]).add(parts[1]);
+                        }
+                    } catch (Exception e) {}
+                }
+            } catch (Exception e) {}
+        }
+        
+        void saveWhitelist() {
+            try {
+                HashSet<String> enc = new HashSet<>();
+                for (String d : whitelist) enc.add(crypto.encrypt(d));
+                prefs.edit().putStringSet("ad_whitelist", enc).apply();
+            } catch (Exception e) {}
+        }
+        
+        void loadWhitelist() {
+            try {
+                Set<String> saved = prefs.getStringSet("ad_whitelist", new HashSet<>());
+                for (String s : saved) {
+                    try { whitelist.add(crypto.decrypt(s)); } catch (Exception e) {}
+                }
+            } catch (Exception e) {}
+        }
+    }
+	    // ========== PERSISTENCE ==========
+    
+    private void load() {
+        try {
+            theme = prefs.getInt("theme", 0);
+            httpsForce = prefs.getBoolean("https", true);
+            blockAds = prefs.getBoolean("ads", true);
+            blockTrack = prefs.getBoolean("track", true);
+            blockFinger = prefs.getBoolean("finger", true);
+            blockRTC = prefs.getBoolean("rtc", true);
+            safeMode = prefs.getBoolean("safe", true);
+            textSize = prefs.getInt("zoom", 100);
+            searchEngine = prefs.getString("engine", "google");
+            enableJS = prefs.getBoolean("js", true);
+            enableImages = prefs.getBoolean("images", true);
+            confirmExit = prefs.getBoolean("confirm_exit", true);
+            autoSuggest = prefs.getBoolean("suggest", true);
+            savePasswords = prefs.getBoolean("save_passwords", true);
+            openLinksInApps = prefs.getBoolean("open_in_apps", true);
+            highScore = prefs.getInt("high_score", 0);
+            turboMode = prefs.getBoolean("turbo", false);
+            blockPopups = prefs.getBoolean("block_popups", true);
+            blockCookieBanners = prefs.getBoolean("block_cookies", true);
+            blockAutoplay = prefs.getBoolean("block_autoplay", true);
+            textOnlyMode = prefs.getBoolean("text_only", false);
+            swipeNavigation = prefs.getBoolean("swipe_nav", true);
+            parentalControl = prefs.getBoolean("parental", false);
+            parentalPin = prefs.getString("parental_pin", "");
+            customUserAgent = prefs.getString("custom_ua", "");
+            adsBlocked = prefs.getLong("ads_blocked", 0);
+            trackersBlocked = prefs.getLong("trackers_blocked", 0);
+            dataSaved = prefs.getLong("data_saved", 0);
+            pagesLoaded = prefs.getLong("pages_loaded", 0);
+            browsingTime = prefs.getLong("browsing_time", 0);
+            masterPasswordEnabled = prefs.getBoolean("master_pwd_enabled", false);
+            masterPasswordHash = prefs.getString("master_pwd_hash", "");
+            
+            if (!masterPasswordEnabled || masterPasswordHash.isEmpty()) {
+                crypto.initDefault();
+            }
+            
+            Set<String> savedMarks = prefs.getStringSet("marks_enc", null);
+            if (savedMarks != null) {
+                for (String m : savedMarks) {
+                    try { marks.add(crypto.decrypt(m)); } catch (Exception e) {}
+                }
+            }
+            
+            Set<String> savedHist = prefs.getStringSet("history_enc", new HashSet<>());
+            for (String h : savedHist) {
+                try {
+                    String[] parts = crypto.decrypt(h).split("\\|\\|\\|");
+                    if (parts.length >= 3) {
+                        hist.add(new HistoryItem(parts[0], parts[1], Long.parseLong(parts[2])));
+                    }
+                } catch (Exception e) {}
+            }
+            Collections.sort(hist, (a, b) -> Long.compare(b.time, a.time));
+            
+            Set<String> savedPwd = prefs.getStringSet("passwords_enc", new HashSet<>());
+            for (String p : savedPwd) {
+                try {
+                    String[] parts = crypto.decrypt(p).split("\\|\\|\\|");
+                    if (parts.length >= 3) {
+                        passwords.put(parts[0], new SavedPassword(parts[0], parts[1], parts[2]));
+                    }
+                } catch (Exception e) {}
+            }
+            
+            Set<String> blocked = prefs.getStringSet("blocked_sites", new HashSet<>());
+            for (String s : blocked) {
+                try { blockedSites.add(crypto.decrypt(s)); } catch (Exception e) { blockedSites.add(s); }
+            }
+            
+            Set<String> filters = prefs.getStringSet("custom_filters", new HashSet<>());
+            for (String f : filters) {
+                try { customFilters.add(crypto.decrypt(f)); } catch (Exception e) { customFilters.add(f); }
+            }
+            
+            adBlock.loadSiteRules();
+            adBlock.loadWhitelist();
+        } catch (Exception e) {}
+    }
+
+    private void save() {
+        try {
+            if (sessionStartTime > 0) {
+                browsingTime += (System.currentTimeMillis() - sessionStartTime) / 1000;
+                sessionStartTime = System.currentTimeMillis();
+            }
+            
+            SharedPreferences.Editor ed = prefs.edit();
+            ed.putInt("theme", theme);
+            ed.putBoolean("https", httpsForce);
+            ed.putBoolean("ads", blockAds);
+            ed.putBoolean("track", blockTrack);
+            ed.putBoolean("finger", blockFinger);
+            ed.putBoolean("rtc", blockRTC);
+            ed.putBoolean("safe", safeMode);
+            ed.putInt("zoom", textSize);
+            ed.putString("engine", searchEngine);
+            ed.putBoolean("js", enableJS);
+            ed.putBoolean("images", enableImages);
+            ed.putBoolean("confirm_exit", confirmExit);
+            ed.putBoolean("suggest", autoSuggest);
+            ed.putBoolean("save_passwords", savePasswords);
+            ed.putBoolean("open_in_apps", openLinksInApps);
+            ed.putInt("high_score", highScore);
+            ed.putBoolean("turbo", turboMode);
+            ed.putBoolean("block_popups", blockPopups);
+            ed.putBoolean("block_cookies", blockCookieBanners);
+            ed.putBoolean("block_autoplay", blockAutoplay);
+            ed.putBoolean("text_only", textOnlyMode);
+            ed.putBoolean("swipe_nav", swipeNavigation);
+            ed.putBoolean("parental", parentalControl);
+            ed.putString("parental_pin", parentalPin);
+            ed.putString("custom_ua", customUserAgent);
+            ed.putLong("ads_blocked", adsBlocked);
+            ed.putLong("trackers_blocked", trackersBlocked);
+            ed.putLong("data_saved", dataSaved);
+            ed.putLong("pages_loaded", pagesLoaded);
+            ed.putLong("browsing_time", browsingTime);
+            ed.putBoolean("master_pwd_enabled", masterPasswordEnabled);
+            ed.putString("master_pwd_hash", masterPasswordHash);
+            
+            HashSet<String> encMarks = new HashSet<>();
+            for (String m : marks) encMarks.add(crypto.encrypt(m));
+            ed.putStringSet("marks_enc", encMarks);
+            
+            HashSet<String> encHist = new HashSet<>();
+            int count = Math.min(hist.size(), 500);
+            for (int i = 0; i < count; i++) {
+                HistoryItem h = hist.get(i);
+                encHist.add(crypto.encrypt(h.url + "|||" + h.title + "|||" + h.time));
+            }
+            ed.putStringSet("history_enc", encHist);
+            
+            HashSet<String> encPwd = new HashSet<>();
+            for (SavedPassword sp : passwords.values()) {
+                encPwd.add(crypto.encrypt(sp.domain + "|||" + sp.username + "|||" + sp.password));
+            }
+            ed.putStringSet("passwords_enc", encPwd);
+            
+            HashSet<String> encBlocked = new HashSet<>();
+            for (String s : blockedSites) encBlocked.add(crypto.encrypt(s));
+            ed.putStringSet("blocked_sites", encBlocked);
+            
+            HashSet<String> encFilters = new HashSet<>();
+            for (String f : customFilters) encFilters.add(crypto.encrypt(f));
+            ed.putStringSet("custom_filters", encFilters);
+            
+            ed.apply();
+        } catch (Exception e) {}
+    }
+
+    private boolean isNetworkAvailable() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (cm == null) return false;
+            NetworkInfo ni = cm.getActiveNetworkInfo();
+            return ni != null && ni.isConnected();
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    private void fullscreen() {
+        try {
+            getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            );
+            getWindow().setStatusBarColor(0);
+            getWindow().setNavigationBarColor(0);
+            getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } catch (Exception e) {}
+    }
+
+    private void applyTheme() {
+        try {
+            int[] t = themes[theme % themes.length];
+            cBg = t[0]; cCard = t[1]; cLight = t[2];
+            cText = t[3]; cDim = t[4]; cPrimary = t[5]; cAccent = t[6];
+        } catch (Exception e) {
+            cBg = 0xFF0D0D12; cCard = 0xFF16161F; cLight = 0xFF1E1E2A;
+            cText = 0xFFFFFFFF; cDim = 0xFF8B8B9E; cPrimary = 0xFF7C3AED; cAccent = 0xFF06B6D4;
+        }
+    }
+
+    // ========== BUILD UI ==========
+
+    private void build() {
+        try {
+            root = new FrameLayout(this);
+            root.setBackgroundColor(cBg);
+            setContentView(root);
+
+            fullscreenContainer = new FrameLayout(this);
+            fullscreenContainer.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+            fullscreenContainer.setBackgroundColor(Color.BLACK);
+            fullscreenContainer.setVisibility(View.GONE);
+            
+            mainLayout = new LinearLayout(this);
+            mainLayout.setOrientation(LinearLayout.VERTICAL);
+            mainLayout.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+            root.addView(mainLayout);
+            root.addView(fullscreenContainer);
+
+            buildToolbar();
+            buildFindBar();
+            buildSuggestions();
+            buildTabs();
+            buildProgress();
+            buildContent();
+            buildNav();
+            buildOverlay();
+            buildHome();
+        } catch (Exception e) {}
+    }
+
+    private void buildToolbar() {
+        try {
+            toolbar = new LinearLayout(this);
+            toolbar.setOrientation(LinearLayout.HORIZONTAL);
+            toolbar.setBackgroundColor(cCard);
+            toolbar.setGravity(Gravity.CENTER_VERTICAL);
+            toolbar.setPadding(dp(8), dp(4), dp(8), dp(4));
+            toolbar.setLayoutParams(lp(-1, dp(52)));
+
+            toolbar.addView(navBtn(IC_BACK, () -> back()));
+            toolbar.addView(navBtn(IC_FORWARD, () -> fwd()));
+            toolbar.addView(navBtn(IC_REFRESH, () -> refresh()));
+            toolbar.addView(navBtn(IC_HOME, () -> goHome()));
+
+            FrameLayout urlBox = new FrameLayout(this);
+            LinearLayout.LayoutParams up = new LinearLayout.LayoutParams(0, dp(38), 1f);
+            up.setMargins(dp(6), 0, dp(6), 0);
+            urlBox.setLayoutParams(up);
+            urlBox.setBackgroundDrawable(roundRect(cBg, 19));
+
+            lockIcon = new ImageView(this);
+            lockIcon.setLayoutParams(flp(dp(16), dp(16), Gravity.CENTER_VERTICAL | Gravity.START, dp(12), 0, 0, 0));
+            lockIcon.setImageDrawable(icon(IC_SHIELD, 0xFF10B981));
+
+            urlInput = new EditText(this);
+            urlInput.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+            urlInput.setBackgroundColor(0);
+            urlInput.setPadding(dp(34), 0, dp(75), 0);
+            urlInput.setTextColor(cText);
+            urlInput.setHintTextColor(cDim);
+            urlInput.setHint(Strings.searchOrUrl);
+            urlInput.setSingleLine();
+            urlInput.setTextSize(14);
+            urlInput.setGravity(Gravity.CENTER_VERTICAL);
+            urlInput.setImeOptions(EditorInfo.IME_ACTION_GO);
+            urlInput.setSelectAllOnFocus(true);
+            
+            urlInput.setOnEditorActionListener((v, a, e) -> {
+                try {
+                    String q = urlInput.getText().toString().trim();
+                    if (!q.isEmpty()) { 
+                        go(q); 
+                        hideKb(); 
+                        hideSuggestions(); 
+                    }
+                } catch (Exception ex) {}
+                return true;
+            });
+            
+            urlInput.addTextChangedListener(new TextWatcher() {
+                public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+                public void onTextChanged(CharSequence s, int st, int b, int c) {}
+                public void afterTextChanged(Editable s) {
+                    try {
+                        if (autoSuggest && urlInput.hasFocus()) showSuggestions(s.toString());
+                    } catch (Exception e) {}
+                }
+            });
+            
+            urlInput.setOnFocusChangeListener((v, f) -> { if (!f) hideSuggestions(); });
+
+            adBlockIcon = new ImageView(this);
+            adBlockIcon.setLayoutParams(flp(dp(18), dp(18), Gravity.CENTER_VERTICAL | Gravity.END, 0, 0, dp(34), 0));
+            adBlockIcon.setImageDrawable(icon(IC_SHIELD_CHECK, blockAds ? 0xFF10B981 : cDim));
+            adBlockIcon.setOnClickListener(v -> { click(v); showQuickAdBlockMenu(); });
+
+            bookmarkIcon = new ImageView(this);
+            bookmarkIcon.setLayoutParams(flp(dp(20), dp(20), Gravity.CENTER_VERTICAL | Gravity.END, 0, 0, dp(10), 0));
+            bookmarkIcon.setImageDrawable(icon(IC_BOOKMARK, cDim));
+            bookmarkIcon.setOnClickListener(v -> { click(v); toggleBookmark(); });
+
+            urlBox.addView(urlInput);
+            urlBox.addView(lockIcon);
+            urlBox.addView(adBlockIcon);
+            urlBox.addView(bookmarkIcon);
+            urlBox.setOnLongClickListener(v -> { showUrlOptions(); return true; });
+            
+            toolbar.addView(urlBox);
+            toolbar.addView(navBtn(IC_MENU, () -> showMenu()));
+
+            mainLayout.addView(toolbar);
+        } catch (Exception e) {}
+    }
+
+    private void buildFindBar() {
+        try {
+            findBar = new FrameLayout(this);
+            findBar.setLayoutParams(lp(-1, dp(48)));
+            findBar.setBackgroundColor(cCard);
+            findBar.setVisibility(View.GONE);
+            findBar.setPadding(dp(12), dp(6), dp(12), dp(6));
+
+            LinearLayout fc = new LinearLayout(this);
+            fc.setOrientation(LinearLayout.HORIZONTAL);
+            fc.setGravity(Gravity.CENTER_VERTICAL);
+            fc.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+
+            findInput = new EditText(this);
+            LinearLayout.LayoutParams fip = new LinearLayout.LayoutParams(0, dp(36), 1f);
+            findInput.setLayoutParams(fip);
+            findInput.setBackgroundDrawable(roundRect(cBg, 18));
+            findInput.setPadding(dp(14), 0, dp(14), 0);
+            findInput.setTextColor(cText);
+            findInput.setHintTextColor(cDim);
+            findInput.setHint(Strings.findOnPageHint);
+            findInput.setSingleLine();
+            findInput.setTextSize(14);
+            findInput.addTextChangedListener(new TextWatcher() {
+                public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+                public void onTextChanged(CharSequence s, int st, int b, int c) {}
+                public void afterTextChanged(Editable s) { findOnPage(s.toString()); }
+            });
+
+            findCount = new TextView(this);
+            findCount.setTextColor(cDim);
+            findCount.setTextSize(12);
+            findCount.setPadding(dp(10), 0, dp(10), 0);
+
+            ImageView prev = new ImageView(this);
+            prev.setLayoutParams(new LinearLayout.LayoutParams(dp(36), dp(36)));
+            prev.setImageDrawable(icon(IC_ARROW_UP, cText));
+            prev.setBackgroundDrawable(ripple(circle(0x20FFFFFF)));
+            prev.setPadding(dp(8), dp(8), dp(8), dp(8));
+            prev.setOnClickListener(v -> findPrev());
+
+            ImageView next = new ImageView(this);
+            next.setLayoutParams(new LinearLayout.LayoutParams(dp(36), dp(36)));
+            next.setImageDrawable(icon(IC_ARROW_DOWN, cText));
+            next.setBackgroundDrawable(ripple(circle(0x20FFFFFF)));
+            next.setPadding(dp(8), dp(8), dp(8), dp(8));
+            next.setOnClickListener(v -> findNext());
+
+            ImageView cls = new ImageView(this);
+            cls.setLayoutParams(new LinearLayout.LayoutParams(dp(36), dp(36)));
+            cls.setImageDrawable(icon(IC_CLOSE, cDim));
+            cls.setBackgroundDrawable(ripple(circle(0x20FFFFFF)));
+            cls.setPadding(dp(8), dp(8), dp(8), dp(8));
+            cls.setOnClickListener(v -> closeFindBar());
+
+            fc.addView(findInput);
+            fc.addView(findCount);
+            fc.addView(prev);
+            fc.addView(next);
+            fc.addView(cls);
+            findBar.addView(fc);
+            mainLayout.addView(findBar);
+        } catch (Exception e) {}
+    }
+
+    private void showFindBar() {
+        try {
+            if (findBar != null) {
+                findBar.setVisibility(View.VISIBLE);
+                if (findInput != null) {
+                    findInput.requestFocus();
+                    showKb(findInput);
+                }
+            }
+        } catch (Exception e) {}
+    }
+
+    private void closeFindBar() {
+        try {
+            if (findBar != null) findBar.setVisibility(View.GONE);
+            if (findInput != null) findInput.setText("");
+            hideKb();
+            Tab t = tab();
+            if (t != null && t.wv != null) {
+                try { t.wv.clearMatches(); } catch (Exception e) {}
+            }
+        } catch (Exception e) {}
+    }
+
+    private void findOnPage(String query) {
+        try {
+            Tab t = tab();
+            if (t == null || t.wv == null) return;
+            if (query == null || query.isEmpty()) { 
+                try { t.wv.clearMatches(); } catch (Exception e) {}
+                if (findCount != null) findCount.setText(""); 
+            } else {
+                try { t.wv.findAllAsync(query); } catch (Exception e) {}
+            }
+        } catch (Exception e) {}
+    }
+
+    private void findNext() { 
+        try { Tab t = tab(); if (t != null && t.wv != null) t.wv.findNext(true); } catch (Exception e) {} 
+    }
+    
+    private void findPrev() { 
+        try { Tab t = tab(); if (t != null && t.wv != null) t.wv.findNext(false); } catch (Exception e) {} 
+    }
+
+    private void buildSuggestions() {
+        try {
+            suggestions = new LinearLayout(this);
+            suggestions.setOrientation(LinearLayout.VERTICAL);
+            suggestions.setBackgroundDrawable(roundRect(cCard, 12));
+            FrameLayout.LayoutParams sp = new FrameLayout.LayoutParams(-1, -2);
+            sp.setMargins(dp(60), dp(54), dp(60), 0);
+            suggestions.setLayoutParams(sp);
+            suggestions.setVisibility(View.GONE);
+            suggestions.setElevation(dp(8));
+            root.addView(suggestions);
+        } catch (Exception e) {}
+    }
+
+    private void showSuggestions(String query) {
+        try {
+            if (query == null || query.length() < 2) { hideSuggestions(); return; }
+            suggestions.removeAllViews();
+            String q = query.toLowerCase();
+            int count = 0;
+            
+            for (HistoryItem h : hist) {
+                if (count >= 5) break;
+                if (h.url != null && h.title != null && 
+                    (h.url.toLowerCase().contains(q) || h.title.toLowerCase().contains(q))) {
+                    addSuggestion(h.title, h.url, IC_CLOCK);
+                    count++;
+                }
+            }
+            for (String m : marks) {
+                if (count >= 8) break;
+                if (m != null && m.toLowerCase().contains(q)) {
+                    addSuggestion(m, m, IC_BOOKMARK);
+                    count++;
+                }
+            }
+            addSuggestion(Strings.search + ": " + query, query, IC_SEARCH);
+            suggestions.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
+        } catch (Exception e) {}
+    }
+
+    private void addSuggestion(final String title, final String url, int iconType) {
+        try {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setPadding(dp(14), dp(12), dp(14), dp(12));
+            row.setBackgroundDrawable(ripple(null));
+            
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(18), dp(18)));
+            ic.setImageDrawable(icon(iconType, cDim));
+            
+            TextView txt = new TextView(this);
+            txt.setText(title != null ? title : "");
+            txt.setTextColor(cText);
+            txt.setTextSize(13);
+            txt.setSingleLine();
+            txt.setEllipsize(TextUtils.TruncateAt.END);
+            LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(0, -2, 1f);
+            tp.setMargins(dp(12), 0, 0, 0);
+            txt.setLayoutParams(tp);
+            
+            row.addView(ic);
+            row.addView(txt);
+            row.setOnClickListener(v -> { go(url); hideKb(); hideSuggestions(); });
+            suggestions.addView(row);
+        } catch (Exception e) {}
+    }
+
+    private void hideSuggestions() { 
+        try { if (suggestions != null) suggestions.setVisibility(View.GONE); } catch (Exception e) {} 
+    }
+
+    private void buildTabs() {
+        try {
+            HorizontalScrollView sv = new HorizontalScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(40)));
+            sv.setHorizontalScrollBarEnabled(false);
+            sv.setBackgroundColor(cBg);
+            
+            LinearLayout box = new LinearLayout(this);
+            box.setOrientation(LinearLayout.HORIZONTAL);
+            box.setPadding(dp(8), dp(6), dp(8), dp(6));
+            box.setGravity(Gravity.CENTER_VERTICAL);
+            
+            tabStrip = new LinearLayout(this);
+            tabStrip.setOrientation(LinearLayout.HORIZONTAL);
+            tabStrip.setGravity(Gravity.CENTER_VERTICAL);
+            box.addView(tabStrip);
+            
+            ImageView add = new ImageView(this);
+            LinearLayout.LayoutParams ap = new LinearLayout.LayoutParams(dp(28), dp(28));
+            ap.setMargins(dp(6), 0, 0, 0);
+            add.setLayoutParams(ap);
+            add.setImageDrawable(icon(IC_PLUS, cPrimary));
+            add.setBackgroundDrawable(ripple(circle(0x20FFFFFF)));
+            add.setPadding(dp(6), dp(6), dp(6), dp(6));
+            add.setOnClickListener(v -> { click(v); newTab("home", Strings.newTab); });
+            box.addView(add);
+            sv.addView(box);
+            mainLayout.addView(sv);
+        } catch (Exception e) {}
+    }
+
+    private void buildProgress() {
+        try {
+            loadBar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+            loadBar.setLayoutParams(lp(-1, dp(3)));
+            loadBar.setMax(100);
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColors(new int[]{cPrimary, cAccent});
+            gd.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+            gd.setCornerRadius(dp(2));
+            LayerDrawable ld = new LayerDrawable(new Drawable[]{
+                new ColorDrawable(0x20FFFFFF),
+                new ClipDrawable(gd, Gravity.START, ClipDrawable.HORIZONTAL)
+            });
+            loadBar.setProgressDrawable(ld);
+            loadBar.setVisibility(View.GONE);
+            mainLayout.addView(loadBar);
+        } catch (Exception e) {}
+    }
+
+    private void buildContent() {
+        try {
+            content = new FrameLayout(this) {
+                @Override
+                public boolean onTouchEvent(MotionEvent event) {
+                    try {
+                        if (gestureDetector != null) gestureDetector.onTouchEvent(event);
+                    } catch (Exception e) {}
+                    return super.onTouchEvent(event);
+                }
+                @Override
+                public boolean onInterceptTouchEvent(MotionEvent event) {
+                    try {
+                        if (gestureDetector != null) gestureDetector.onTouchEvent(event);
+                    } catch (Exception e) {}
+                    return super.onInterceptTouchEvent(event);
+                }
+            };
+            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(-1, 0, 1f);
+            content.setLayoutParams(cp);
+            content.setBackgroundColor(cBg);
+            mainLayout.addView(content);
+        } catch (Exception e) {}
+    }
+
+    private void buildNav() {
+        try {
+            bottomNav = new LinearLayout(this);
+            bottomNav.setOrientation(LinearLayout.HORIZONTAL);
+            bottomNav.setBackgroundColor(cCard);
+            bottomNav.setGravity(Gravity.CENTER);
+            bottomNav.setLayoutParams(lp(-1, dp(58)));
+            
+            addNavItem(IC_SHIELD_CHECK, Strings.adblock, () -> showAdBlockSettings());
+            addNavItem(IC_LOCK, Strings.security, () -> showSecurity());
+            addNavItem(IC_STAR, Strings.bookmarks, () -> showMarks());
+            addNavItem(IC_PALETTE, Strings.themes, () -> showThemes());
+            addNavItem(IC_GEAR, Strings.settings, () -> showSettings());
+            
+            mainLayout.addView(bottomNav);
+        } catch (Exception e) {}
+    }
+
+    private void addNavItem(final int ic, String label, final Runnable action) {
+        try {
+            LinearLayout item = new LinearLayout(this);
+            item.setOrientation(LinearLayout.VERTICAL);
+            item.setGravity(Gravity.CENTER);
+            item.setLayoutParams(new LinearLayout.LayoutParams(0, -1, 1f));
+            item.setPadding(dp(4), dp(8), dp(4), dp(8));
+            item.setBackgroundDrawable(ripple(null));
+            
+            ImageView img = new ImageView(this);
+            img.setLayoutParams(new LinearLayout.LayoutParams(dp(24), dp(24)));
+            img.setImageDrawable(icon(ic, cPrimary));
+            
+            TextView txt = new TextView(this);
+            txt.setText(label != null ? label : "");
+            txt.setTextColor(cDim);
+            txt.setTextSize(10);
+            txt.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(-2, -2);
+            tp.setMargins(0, dp(4), 0, 0);
+            txt.setLayoutParams(tp);
+            
+            item.addView(img);
+            item.addView(txt);
+            item.setOnClickListener(v -> { click(v); if (action != null) action.run(); });
+            bottomNav.addView(item);
+        } catch (Exception e) {}
+    }
+
+    private void buildOverlay() {
+        try {
+            overlay = new FrameLayout(this);
+            overlay.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+            overlay.setBackgroundColor(0x80000000);
+            overlay.setVisibility(View.GONE);
+            overlay.setAlpha(0f);
+            overlay.setOnClickListener(v -> closeDialog());
+            root.addView(overlay);
+            
+            dialog = new FrameLayout(this);
+            FrameLayout.LayoutParams dp = new FrameLayout.LayoutParams(-1, -2);
+            dp.gravity = Gravity.CENTER;
+            dp.setMargins(dp(16), dp(60), dp(16), dp(60));
+            dialog.setLayoutParams(dp);
+            dialog.setVisibility(View.GONE);
+            root.addView(dialog);
+        } catch (Exception e) {}
+    }
+
+    private void buildHome() {
+        try {
+            homeView = new ScrollView(this);
+            homeView.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+            homeView.setBackgroundColor(cBg);
+            homeView.setFillViewport(true);
+
+            LinearLayout c = new LinearLayout(this);
+            c.setOrientation(LinearLayout.VERTICAL);
+            c.setGravity(Gravity.CENTER_HORIZONTAL);
+            c.setPadding(dp(20), dp(40), dp(20), dp(40));
+
+            ImageView logo = new ImageView(this);
+            logo.setLayoutParams(new LinearLayout.LayoutParams(dp(72), dp(72)));
+            logo.setImageDrawable(createLogo());
+            c.addView(logo);
+
+            TextView title = new TextView(this);
+            title.setText(Strings.appName);
+            title.setTextColor(cPrimary);
+            title.setTextSize(28);
+            title.setTypeface(null, Typeface.BOLD);
+            title.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams titleP = new LinearLayout.LayoutParams(-2, -2);
+            titleP.setMargins(0, dp(12), 0, 0);
+            title.setLayoutParams(titleP);
+            c.addView(title);
+
+            TextView subtitle = new TextView(this);
+            subtitle.setText(Strings.securePrivateFast);
+            subtitle.setTextColor(cDim);
+            subtitle.setTextSize(14);
+            subtitle.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams subP = new LinearLayout.LayoutParams(-2, -2);
+            subP.setMargins(0, dp(4), 0, dp(24));
+            subtitle.setLayoutParams(subP);
+            c.addView(subtitle);
+
+            LinearLayout search = new LinearLayout(this);
+            search.setOrientation(LinearLayout.HORIZONTAL);
+            search.setGravity(Gravity.CENTER_VERTICAL);
+            search.setBackgroundDrawable(roundRect(cCard, 28));
+            search.setLayoutParams(lp(-1, dp(56)));
+            search.setPadding(dp(20), 0, dp(12), 0);
+
+            ImageView si = new ImageView(this);
+            si.setLayoutParams(new LinearLayout.LayoutParams(dp(24), dp(24)));
+            si.setImageDrawable(icon(IC_SEARCH, cDim));
+
+            final EditText sinput = new EditText(this);
+            LinearLayout.LayoutParams sip = new LinearLayout.LayoutParams(0, -1, 1f);
+            sip.setMargins(dp(14), 0, 0, 0);
+            sinput.setLayoutParams(sip);
+            sinput.setBackgroundColor(0);
+            sinput.setTextColor(cText);
+            sinput.setHintTextColor(cDim);
+            sinput.setHint(Strings.searchWeb);
+            sinput.setSingleLine();
+            sinput.setTextSize(16);
+            sinput.setGravity(Gravity.CENTER_VERTICAL);
+            sinput.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+            sinput.setOnEditorActionListener((v, a, e) -> {
+                try {
+                    String q = sinput.getText().toString().trim();
+                    if (!q.isEmpty()) { search(q); sinput.setText(""); hideKb(); }
+                } catch (Exception ex) {}
+                return true;
+            });
+
+            ImageView micBtn = new ImageView(this);
+            micBtn.setLayoutParams(new LinearLayout.LayoutParams(dp(40), dp(40)));
+            micBtn.setImageDrawable(icon(IC_MIC, cPrimary));
+            micBtn.setBackgroundDrawable(ripple(circle(0x20FFFFFF)));
+            micBtn.setPadding(dp(8), dp(8), dp(8), dp(8));
+            micBtn.setOnClickListener(v -> { click(v); startVoiceSearch(); });
+
+            search.addView(si);
+            search.addView(sinput);
+            search.addView(micBtn);
+            c.addView(search);
+
+            c.addView(buildStatsCard());
+            c.addView(buildQuickLinks());
+            c.addView(buildSecurityStatus());
+            c.addView(buildQuickActions());
+
+            homeView.addView(c);
+        } catch (Exception e) {}
+    }
+
+    private LinearLayout buildStatsCard() {
+        LinearLayout card = new LinearLayout(this);
+        try {
+            card.setOrientation(LinearLayout.HORIZONTAL);
+            card.setBackgroundDrawable(roundRect(cCard, 16));
+            card.setPadding(dp(16), dp(16), dp(16), dp(16));
+            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(-1, -2);
+            cp.setMargins(0, dp(20), 0, 0);
+            card.setLayoutParams(cp);
+
+            addStatItem(card, IC_SHIELD_CHECK, formatNumber(adsBlocked), Strings.adsBlocked);
+            addStatItem(card, IC_EYE_OFF, formatNumber(trackersBlocked), Strings.trackersBlocked);
+            addStatItem(card, IC_ZAP, formatBytes(dataSaved), Strings.dataSaved);
+        } catch (Exception e) {}
+        return card;
+    }
+
+    private void addStatItem(LinearLayout parent, int iconType, String value, String label) {
+        try {
+            LinearLayout item = new LinearLayout(this);
+            item.setOrientation(LinearLayout.VERTICAL);
+            item.setGravity(Gravity.CENTER);
+            item.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
+
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(24), dp(24)));
+            ic.setImageDrawable(icon(iconType, cPrimary));
+
+            TextView val = new TextView(this);
+            val.setText(value != null ? value : "0");
+            val.setTextColor(cText);
+            val.setTextSize(18);
+            val.setTypeface(null, Typeface.BOLD);
+            val.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams vp = new LinearLayout.LayoutParams(-2, -2);
+            vp.setMargins(0, dp(4), 0, 0);
+            val.setLayoutParams(vp);
+
+            TextView lab = new TextView(this);
+            lab.setText(label != null ? label : "");
+            lab.setTextColor(cDim);
+            lab.setTextSize(11);
+            lab.setGravity(Gravity.CENTER);
+
+            item.addView(ic);
+            item.addView(val);
+            item.addView(lab);
+            if (parent != null) parent.addView(item);
+        } catch (Exception e) {}
+    }
+
+    private GridLayout buildQuickLinks() {
+        GridLayout grid = new GridLayout(this);
+        try {
+            grid.setColumnCount(4);
+            LinearLayout.LayoutParams gp = new LinearLayout.LayoutParams(-1, -2);
+            gp.setMargins(0, dp(24), 0, 0);
+            grid.setLayoutParams(gp);
+
+            String[][] sites = {
+                {"Google", "https://www.google.com", "G", "4285F4"},
+                {"YouTube", "https://www.youtube.com", "Y", "FF0000"},
+                {"Facebook", "https://www.facebook.com", "f", "1877F2"},
+                {"Twitter", "https://www.x.com", "X", "000000"},
+                {"Instagram", "https://www.instagram.com", "I", "E4405F"},
+                {"Reddit", "https://www.reddit.com", "R", "FF4500"},
+                {"Wikipedia", "https://www.wikipedia.org", "W", "666666"},
+                {"Amazon", "https://www.amazon.com", "A", "FF9900"}
+            };
+
+            for (int i = 0; i < sites.length; i++) {
+                final String[] site = sites[i];
+                View item = createQuickLink(site[0], site[1], site[2], Color.parseColor("#" + site[3]));
+                GridLayout.LayoutParams glp = new GridLayout.LayoutParams();
+                glp.width = 0;
+                glp.height = -2;
+                glp.columnSpec = GridLayout.spec(i % 4, 1f);
+                glp.setMargins(dp(4), dp(4), dp(4), dp(4));
+                item.setLayoutParams(glp);
+                grid.addView(item);
+            }
+        } catch (Exception e) {}
+        return grid;
+    }
+
+    private LinearLayout buildSecurityStatus() {
+        LinearLayout status = new LinearLayout(this);
+        try {
+            status.setOrientation(LinearLayout.HORIZONTAL);
+            status.setBackgroundDrawable(roundRect(0x2010B981, 16));
+            status.setPadding(dp(16), dp(14), dp(16), dp(14));
+            status.setGravity(Gravity.CENTER_VERTICAL);
+            LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(-1, -2);
+            sp.setMargins(0, dp(20), 0, 0);
+            status.setLayoutParams(sp);
+
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(28), dp(28)));
+            ic.setImageDrawable(icon(IC_SHIELD_CHECK, 0xFF10B981));
+
+            LinearLayout col = new LinearLayout(this);
+            col.setOrientation(LinearLayout.VERTICAL);
+            col.setPadding(dp(12), 0, 0, 0);
+
+            TextView t1 = new TextView(this);
+            t1.setText(Strings.maxProtectionActive);
+            t1.setTextColor(0xFF10B981);
+            t1.setTextSize(14);
+            t1.setTypeface(null, Typeface.BOLD);
+
+            StringBuilder prot = new StringBuilder();
+            if (blockAds) prot.append("AdBlock");
+            if (blockTrack) prot.append(" + Anti-Track");
+            if (httpsForce) prot.append(" + HTTPS");
+            if (blockFinger) prot.append(" + Anti-Fingerprint");
+            
+            TextView t2 = new TextView(this);
+            t2.setText(prot.toString());
+            t2.setTextColor(cDim);
+            t2.setTextSize(11);
+
+            col.addView(t1);
+            col.addView(t2);
+            status.addView(ic);
+            status.addView(col);
+        } catch (Exception e) {}
+        return status;
+    }
+
+    private LinearLayout buildQuickActions() {
+        LinearLayout container = new LinearLayout(this);
+        try {
+            container.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(-1, -2);
+            cp.setMargins(0, dp(24), 0, 0);
+            container.setLayoutParams(cp);
+
+            TextView title = new TextView(this);
+            title.setText(Strings.quickActions);
+            title.setTextColor(cText);
+            title.setTextSize(16);
+            title.setTypeface(null, Typeface.BOLD);
+            LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(-1, -2);
+            tp.setMargins(0, 0, 0, dp(12));
+            title.setLayoutParams(tp);
+            container.addView(title);
+
+            GridLayout grid = new GridLayout(this);
+            grid.setColumnCount(2);
+            grid.setLayoutParams(new LinearLayout.LayoutParams(-1, -2));
+
+            addFeatureCard(grid, IC_TEXT, Strings.readerMode, Strings.cleanReading, () -> toggleReaderMode());
+            addFeatureCard(grid, IC_MOON, Strings.nightMode, Strings.reduceEyeStrain, () -> toggleNightMode());
+            addFeatureCard(grid, IC_DOWNLOAD, Strings.downloads, Strings.manageFiles, () -> showDownloads());
+            addFeatureCard(grid, IC_STATS, Strings.statistics, Strings.usageStats, () -> showStatistics());
+
+            container.addView(grid);
+        } catch (Exception e) {}
+        return container;
+    }
+
+    private void addFeatureCard(GridLayout parent, int iconType, String title, String desc, Runnable action) {
+        try {
+            LinearLayout card = new LinearLayout(this);
+            card.setOrientation(LinearLayout.VERTICAL);
+            card.setBackgroundDrawable(ripple(roundRect(cCard, 12)));
+            card.setPadding(dp(14), dp(14), dp(14), dp(14));
+            
+            GridLayout.LayoutParams gp = new GridLayout.LayoutParams();
+            gp.width = 0;
+            gp.height = -2;
+            gp.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+            gp.setMargins(dp(4), dp(4), dp(4), dp(4));
+            card.setLayoutParams(gp);
+
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(28), dp(28)));
+            ic.setImageDrawable(icon(iconType, cPrimary));
+
+            TextView t = new TextView(this);
+            t.setText(title != null ? title : "");
+            t.setTextColor(cText);
+            t.setTextSize(14);
+            t.setTypeface(null, Typeface.BOLD);
+            LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(-2, -2);
+            tp.setMargins(0, dp(8), 0, 0);
+            t.setLayoutParams(tp);
+
+            TextView d = new TextView(this);
+            d.setText(desc != null ? desc : "");
+            d.setTextColor(cDim);
+            d.setTextSize(11);
+
+            card.addView(ic);
+            card.addView(t);
+            card.addView(d);
+            card.setOnClickListener(v -> { click(v); if (action != null) action.run(); });
+            if (parent != null) parent.addView(card);
+        } catch (Exception e) {}
+    }
+
+    private Drawable createLogo() {
+        return new Drawable() {
+            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+            public void draw(Canvas c) {
+                try {
+                    int w = getBounds().width(), h = getBounds().height();
+                    float cx = w / 2f, cy = h / 2f, r = Math.min(w, h) / 2f;
+                    
+                    p.setStyle(Paint.Style.FILL);
+                    p.setShader(new LinearGradient(0, 0, w, h, cPrimary, cAccent, Shader.TileMode.CLAMP));
+                    c.drawCircle(cx, cy, r, p);
+                    p.setShader(null);
+                    
+                    p.setColor(Color.WHITE);
+                    Path bird = new Path();
+                    bird.moveTo(cx - r * 0.3f, cy + r * 0.2f);
+                    bird.quadTo(cx - r * 0.1f, cy - r * 0.4f, cx + r * 0.4f, cy - r * 0.3f);
+                    bird.quadTo(cx + r * 0.2f, cy, cx + r * 0.3f, cy + r * 0.3f);
+                    bird.quadTo(cx, cy + r * 0.1f, cx - r * 0.3f, cy + r * 0.2f);
+                    c.drawPath(bird, p);
+                    
+                    Path wing = new Path();
+                    wing.moveTo(cx - r * 0.1f, cy);
+                    wing.quadTo(cx - r * 0.5f, cy - r * 0.2f, cx - r * 0.3f, cy + r * 0.3f);
+                    wing.quadTo(cx, cy + r * 0.1f, cx - r * 0.1f, cy);
+                    p.setAlpha(180);
+                    c.drawPath(wing, p);
+                    p.setAlpha(255);
+                } catch (Exception e) {}
+            }
+            public void setAlpha(int a) { p.setAlpha(a); }
+            public void setColorFilter(ColorFilter cf) { p.setColorFilter(cf); }
+            public int getOpacity() { return PixelFormat.TRANSLUCENT; }
+        };
+    }
+
+    private View createQuickLink(final String name, final String url, String letter, int color) {
+        LinearLayout item = new LinearLayout(this);
+        try {
+            item.setOrientation(LinearLayout.VERTICAL);
+            item.setGravity(Gravity.CENTER);
+            item.setPadding(dp(8), dp(12), dp(8), dp(12));
+            item.setBackgroundDrawable(ripple(roundRect(cLight, 14)));
+
+            FrameLayout iconBox = new FrameLayout(this);
+            iconBox.setLayoutParams(new LinearLayout.LayoutParams(dp(48), dp(48)));
+            iconBox.setBackgroundDrawable(roundRect(cCard, 12));
+
+            final ImageView iconImg = new ImageView(this);
+            FrameLayout.LayoutParams imgP = new FrameLayout.LayoutParams(dp(28), dp(28));
+            imgP.gravity = Gravity.CENTER;
+            iconImg.setLayoutParams(imgP);
+            iconImg.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            iconImg.setImageDrawable(letterDrawable(letter, color));
+            iconBox.addView(iconImg);
+
+            loadFavicon(url, iconImg);
+
+            TextView nameText = new TextView(this);
+            nameText.setText(name != null ? name : "");
+            nameText.setTextColor(cDim);
+            nameText.setTextSize(11);
+            nameText.setGravity(Gravity.CENTER);
+            nameText.setSingleLine();
+            LinearLayout.LayoutParams ntp = new LinearLayout.LayoutParams(-2, -2);
+            ntp.setMargins(0, dp(6), 0, 0);
+            nameText.setLayoutParams(ntp);
+
+            item.addView(iconBox);
+            item.addView(nameText);
+            item.setOnClickListener(v -> { click(v); go(url); });
+            item.setOnLongClickListener(v -> { showQuickLinkOptions(name, url); return true; });
+        } catch (Exception e) {}
+        return item;
+    }
+
+    private void loadFavicon(final String url, final ImageView img) {
+        new Thread(() -> {
+            try {
+                String host = new URL(url).getHost();
+                String faviconUrl = "https://www.google.com/s2/favicons?domain=" + host + "&sz=128";
+                HttpURLConnection conn = (HttpURLConnection) new URL(faviconUrl).openConnection();
+                conn.setConnectTimeout(3000);
+                conn.setReadTimeout(3000);
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+                final Bitmap bitmap = BitmapFactory.decodeStream(conn.getInputStream());
+                if (bitmap != null && bitmap.getWidth() > 1) {
+                    handler.post(() -> {
+                        try {
+                            img.setAlpha(0f);
+                            img.setImageBitmap(bitmap);
+                            img.animate().alpha(1f).setDuration(200).start();
+                        } catch (Exception e) {}
+                    });
+                }
+                conn.disconnect();
+            } catch (Exception e) {}
+        }).start();
+    }
+
+    private Drawable letterDrawable(final String letter, final int color) {
+        return new Drawable() {
+            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+            public void draw(Canvas c) {
+                try {
+                    int w = getBounds().width(), h = getBounds().height();
+                    p.setColor(color);
+                    p.setTextSize(w * 0.55f);
+                    p.setTextAlign(Paint.Align.CENTER);
+                    p.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    Paint.FontMetrics fm = p.getFontMetrics();
+                    c.drawText(letter != null ? letter : "", w / 2f, h / 2f - (fm.ascent + fm.descent) / 2f, p);
+                } catch (Exception e) {}
+            }
+            public void setAlpha(int a) { p.setAlpha(a); }
+            public void setColorFilter(ColorFilter f) { p.setColorFilter(f); }
+            public int getOpacity() { return PixelFormat.TRANSLUCENT; }
+        };
+    }
+	    // ========== TABS ==========
+
+    private void newTab(String url, String title) {
+        try {
+            final int id = tabId++;
+            final boolean home = "home".equals(url);
+            WebView wv = null;
+            
+            if (!home) { 
+                wv = makeWeb(); 
+                if (wv != null) {
+                    wv.loadUrl(url); 
+                }
+            }
+
+            final LinearLayout tab = new LinearLayout(this);
+            tab.setOrientation(LinearLayout.HORIZONTAL);
+            tab.setGravity(Gravity.CENTER_VERTICAL);
+            tab.setPadding(dp(12), dp(6), dp(8), dp(6));
+            tab.setBackgroundDrawable(roundRect(cLight, 10));
+            LinearLayout.LayoutParams tlp = new LinearLayout.LayoutParams(dp(140), dp(30));
+            tlp.setMargins(0, 0, dp(6), 0);
+            tab.setLayoutParams(tlp);
+
+            final ImageView favicon = new ImageView(this);
+            favicon.setLayoutParams(new LinearLayout.LayoutParams(dp(14), dp(14)));
+            favicon.setImageDrawable(icon(home ? IC_HOME : IC_GLOBE, cDim));
+
+            final TextView tt = new TextView(this);
+            tt.setText(title != null ? title : "");
+            tt.setTextColor(cText);
+            tt.setTextSize(12);
+            tt.setSingleLine();
+            tt.setEllipsize(TextUtils.TruncateAt.END);
+            LinearLayout.LayoutParams ttp = new LinearLayout.LayoutParams(0, -2, 1f);
+            ttp.setMargins(dp(6), 0, dp(4), 0);
+            tt.setLayoutParams(ttp);
+
+            ImageView close = new ImageView(this);
+            close.setLayoutParams(new LinearLayout.LayoutParams(dp(16), dp(16)));
+            close.setImageDrawable(icon(IC_CLOSE, cDim));
+            close.setBackgroundDrawable(ripple(circle(0x20FFFFFF)));
+            final int tabIdx = id;
+            close.setOnClickListener(v -> { click(v); closeTab(tabIdx); });
+
+            tab.addView(favicon);
+            tab.addView(tt);
+            tab.addView(close);
+            tab.setOnClickListener(v -> { click(v); switchTab(tabIdx); });
+            tab.setOnLongClickListener(v -> { showTabOptions(tabIdx); return true; });
+
+            if (tabStrip != null) tabStrip.addView(tab);
+            tabs.add(new Tab(id, wv, tab, tt, favicon, url != null ? url : "home", title != null ? title : "", home));
+            switchTab(id);
+        } catch (Exception e) {
+            toast(Strings.error);
+        }
+    }
+
+    private WebView makeWeb() {
+        try {
+            WebView wv = new WebView(this);
+            wv.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+            wv.setVisibility(View.GONE);
+
+            WebSettings s = wv.getSettings();
+            
+            // JavaScript и DOM
+            s.setJavaScriptEnabled(enableJS);
+            s.setDomStorageEnabled(true);
+            s.setDatabaseEnabled(true);
+            
+            // Кэширование
+            if (turboMode) {
+                s.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            } else {
+                s.setCacheMode(WebSettings.LOAD_DEFAULT);
+            }
+            
+            // Зум
+            s.setBuiltInZoomControls(true);
+            s.setDisplayZoomControls(false);
+            s.setSupportZoom(true);
+            
+            // Viewport
+            s.setLoadWithOverviewMode(true);
+            s.setUseWideViewPort(true);
+            s.setTextZoom(textSize);
+            
+            // Изображения
+            s.setLoadsImagesAutomatically(enableImages && !textOnlyMode);
+            s.setBlockNetworkImage(textOnlyMode);
+            
+            // Mixed Content - разрешаем для совместимости
+            s.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            
+            // Геолокация
+            s.setGeolocationEnabled(true);
+            
+            // Файлы
+            s.setAllowFileAccess(true);
+            s.setAllowContentAccess(true);
+            s.setAllowFileAccessFromFileURLs(false);
+            s.setAllowUniversalAccessFromFileURLs(false);
+            
+            // Медиа - критично для AI сайтов
+            s.setMediaPlaybackRequiresUserGesture(blockAutoplay);
+            
+            // Множественные окна
+            s.setSupportMultipleWindows(true);
+            s.setJavaScriptCanOpenWindowsAutomatically(true);
+            
+            // User Agent
+            s.setUserAgentString(ua());
+            
+            // Формы
+            s.setSaveFormData(true);
+            
+            // Приоритет рендеринга
+            s.setRenderPriority(WebSettings.RenderPriority.HIGH);
+            
+            // Отключаем Safe Browsing (может блокировать AI сайты)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                s.setSafeBrowsingEnabled(false);
+            }
+            
+            // Поддержка App Cache (устарело, но некоторые сайты используют)
+            try {
+                s.setAppCacheEnabled(true);
+                s.setAppCachePath(getCacheDir().getAbsolutePath());
+            } catch (Exception e) {}
+            
+            // Cookies
+            try {
+                CookieManager cm = CookieManager.getInstance();
+                cm.setAcceptCookie(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    cm.setAcceptThirdPartyCookies(wv, true);
+                }
+                cm.flush();
+            } catch (Exception e) {}
+
+            // WebView клиенты
+            wv.setWebViewClient(new WC());
+            wv.setWebChromeClient(new CC());
+            
+            // Загрузки
+            wv.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
+                try { 
+                    downloadFile(url, contentDisposition, mimeType); 
+                } catch (Exception e) {
+                    toast(Strings.downloadFailed);
+                }
+            });
+            
+            // Поиск на странице
+            wv.setFindListener((ord, total, done) -> {
+                try {
+                    if (done && findCount != null) {
+                        findCount.setText(total > 0 ? (ord + 1) + "/" + total : "0/0");
+                    }
+                } catch (Exception e) {}
+            });
+            
+            // Аппаратное ускорение
+            wv.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+            
+            // Фокус
+            wv.setFocusable(true);
+            wv.setFocusableInTouchMode(true);
+            
+            // Скроллинг
+            wv.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+            wv.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            
+            // Длинные нажатия
+            wv.setLongClickable(true);
+            wv.setOnLongClickListener(v -> {
+                try {
+                    WebView.HitTestResult result = wv.getHitTestResult();
+                    if (result != null) {
+                        String extra = result.getExtra();
+                        int type = result.getType();
+                        if (type == WebView.HitTestResult.SRC_ANCHOR_TYPE || 
+                            type == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+                            if (extra != null && !extra.isEmpty()) {
+                                showLinkOptions(extra);
+                                return true;
+                            }
+                        } else if (type == WebView.HitTestResult.IMAGE_TYPE) {
+                            if (extra != null && !extra.isEmpty()) {
+                                showImageOptions(extra);
+                                return true;
+                            }
+                        }
+                    }
+                } catch (Exception e) {}
+                return false;
+            });
+
+            if (content != null) {
+                content.addView(wv);
+            }
+            return wv;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private void showLinkOptions(final String url) {
+        try {
+            LinearLayout d = dialogBase(Strings.urlOptions, IC_LINK);
+            addAction(d, IC_GLOBE, Strings.open, () -> { closeDialog(); go(url); });
+            addAction(d, IC_PLUS, Strings.openInNewTab, () -> { closeDialog(); newTab(url, Strings.newTab); });
+            addAction(d, IC_COPY, Strings.copyUrl, () -> { 
+                try { clipboard.setPrimaryClip(ClipData.newPlainText("URL", url)); toast(Strings.urlCopied); } catch (Exception e) {} 
+                closeDialog(); 
+            });
+            addAction(d, IC_SHARE, Strings.share, () -> { closeDialog(); sharePage(url, url); });
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showImageOptions(final String url) {
+        try {
+            LinearLayout d = dialogBase(Strings.urlOptions, IC_IMAGE);
+            addAction(d, IC_GLOBE, Strings.open, () -> { closeDialog(); go(url); });
+            addAction(d, IC_PLUS, Strings.openInNewTab, () -> { closeDialog(); newTab(url, Strings.newTab); });
+            addAction(d, IC_DOWNLOAD, Strings.downloads, () -> { closeDialog(); downloadFile(url, null, "image/*"); });
+            addAction(d, IC_COPY, Strings.copyUrl, () -> { 
+                try { clipboard.setPrimaryClip(ClipData.newPlainText("URL", url)); toast(Strings.urlCopied); } catch (Exception e) {} 
+                closeDialog(); 
+            });
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void downloadFile(String url, String contentDisposition, String mimeType) {
+        try {
+            if (url == null || url.isEmpty()) return;
+            
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS);
+                    return;
+                }
+            }
+            
+            String fileName = null;
+            
+            if (contentDisposition != null && !contentDisposition.isEmpty()) {
+                try {
+                    if (contentDisposition.contains("filename*=")) {
+                        int idx = contentDisposition.indexOf("filename*=");
+                        String part = contentDisposition.substring(idx + 10);
+                        if (part.contains("''")) {
+                            fileName = part.substring(part.indexOf("''") + 2);
+                            if (fileName.contains(";")) fileName = fileName.substring(0, fileName.indexOf(";"));
+                            fileName = java.net.URLDecoder.decode(fileName.trim(), "UTF-8");
+                        }
+                    }
+                    if (fileName == null && contentDisposition.contains("filename=\"")) {
+                        int start = contentDisposition.indexOf("filename=\"") + 10;
+                        int end = contentDisposition.indexOf("\"", start);
+                        if (end > start) {
+                            fileName = contentDisposition.substring(start, end);
+                        }
+                    }
+                    if (fileName == null && contentDisposition.contains("filename=")) {
+                        int idx = contentDisposition.indexOf("filename=") + 9;
+                        fileName = contentDisposition.substring(idx);
+                        if (fileName.contains(";")) fileName = fileName.substring(0, fileName.indexOf(";"));
+                        fileName = fileName.replace("\"", "").trim();
+                    }
+                } catch (Exception e) {}
+            }
+            
+            if (fileName == null || fileName.isEmpty()) {
+                fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
+            }
+            
+            if (fileName != null) {
+                fileName = fileName.replaceAll("[\\\\/:*?\"<>|]", "_");
+            } else {
+                fileName = "download_" + System.currentTimeMillis();
+            }
+            
+            final String finalFileName = fileName;
+            
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+            
+            request.addRequestHeader("User-Agent", ua());
+            request.addRequestHeader("Accept", "*/*");
+            request.addRequestHeader("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7");
+            
+            try {
+                String cookies = CookieManager.getInstance().getCookie(url);
+                if (cookies != null && !cookies.isEmpty()) {
+                    request.addRequestHeader("Cookie", cookies);
+                }
+            } catch (Exception e) {}
+            
+            request.setTitle(finalFileName);
+            request.setDescription(Strings.downloading);
+            if (mimeType != null) request.setMimeType(mimeType);
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.allowScanningByMediaScanner();
+            
+            try {
+                File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                if (!downloadDir.exists()) downloadDir.mkdirs();
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, finalFileName);
+            } catch (Exception e) {
+                request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, finalFileName);
+            }
+            
+            if (downloadManager != null) {
+                downloadManager.enqueue(request);
+                toast(Strings.downloading + ": " + finalFileName);
+            }
+            
+        } catch (Exception e) {
+            toast(Strings.downloadFailed);
+        }
+    }
+
+    private void switchTab(int id) {
+        try {
+            hideOfflineGame();
+            for (Tab t : tabs) {
+                boolean on = t.id == id;
+                if (t.home) {
+                    if (homeView != null) {
+                        homeView.setVisibility(on ? View.VISIBLE : View.GONE);
+                        if (on && homeView.getParent() == null && content != null) {
+                            content.addView(homeView);
+                        }
+                    }
+                } else if (t.wv != null) {
+                    t.wv.setVisibility(on ? View.VISIBLE : View.GONE);
+                    if (on) {
+                        try { t.wv.onResume(); } catch (Exception e) {}
+                    } else {
+                        try { t.wv.onPause(); } catch (Exception e) {}
+                    }
+                }
+                if (t.tab != null) {
+                    t.tab.setBackgroundDrawable(roundRect(on ? ((cPrimary & 0x00FFFFFF) | 0x40000000) : cLight, 10));
+                }
+                if (on) {
+                    currentTab = id;
+                    if (urlInput != null) {
+                        urlInput.setText(t.home ? "" : (t.url != null ? t.url : ""));
+                    }
+                    updateSecurityIcon(t.url);
+                    updateBookmarkIcon(t.url);
+                }
+            }
+        } catch (Exception e) {}
+    }
+
+    private void updateSecurityIcon(String url) {
+        try {
+            if (lockIcon == null) return;
+            if (url == null || url.equals("home")) {
+                lockIcon.setImageDrawable(icon(IC_SHIELD, cDim));
+            } else if (url.startsWith("https://")) {
+                lockIcon.setImageDrawable(icon(IC_LOCK, 0xFF10B981));
+            } else {
+                lockIcon.setImageDrawable(icon(IC_UNLOCK, 0xFFF59E0B));
+            }
+        } catch (Exception e) {}
+    }
+
+    private void updateBookmarkIcon(String url) {
+        try {
+            if (bookmarkIcon == null) return;
+            boolean m = url != null && marks.contains(url);
+            bookmarkIcon.setImageDrawable(icon(m ? IC_BOOKMARK_FILL : IC_BOOKMARK, m ? cPrimary : cDim));
+        } catch (Exception e) {}
+    }
+
+    private void closeTab(int id) {
+        try {
+            if (tabs.size() <= 1) { toast(Strings.cantCloseLastTab); return; }
+            Tab rm = null; int idx = -1;
+            for (int i = 0; i < tabs.size(); i++) {
+                if (tabs.get(i).id == id) { rm = tabs.get(i); idx = i; break; }
+            }
+            if (rm == null) return;
+            if (rm.wv != null) { 
+                try {
+                    rm.wv.stopLoading();
+                    rm.wv.loadUrl("about:blank");
+                    rm.wv.clearHistory();
+                    rm.wv.clearCache(true);
+                    rm.wv.onPause();
+                    rm.wv.removeAllViews();
+                    if (content != null) content.removeView(rm.wv);
+                    rm.wv.destroy();
+                } catch (Exception e) {}
+            }
+            if (tabStrip != null && rm.tab != null) tabStrip.removeView(rm.tab);
+            tabs.remove(rm);
+            if (currentTab == id) {
+                int newIdx = Math.max(0, Math.min(idx - 1, tabs.size() - 1));
+                if (newIdx < tabs.size()) {
+                    switchTab(tabs.get(newIdx).id);
+                }
+            }
+        } catch (Exception e) {}
+    }
+
+    private void showTabOptions(final int id) {
+        try {
+            Tab t = null;
+            for (Tab tab : tabs) if (tab.id == id) { t = tab; break; }
+            if (t == null) return;
+            final Tab ft = t;
+            
+            LinearLayout d = dialogBase(Strings.tabOptions, IC_LAYERS);
+            addAction(d, IC_REFRESH, Strings.refresh, () -> { closeDialog(); if (ft.wv != null) ft.wv.reload(); });
+            addAction(d, IC_COPY, Strings.duplicateTab, () -> { closeDialog(); newTab(ft.url, ft.title); });
+            if (!ft.home) addAction(d, IC_STAR, Strings.bookmarks, () -> { closeDialog(); toggleBookmark(ft.url); });
+            addAction(d, IC_CLOSE, Strings.closeTab, () -> { closeDialog(); closeTab(id); });
+            addAction(d, IC_TRASH, Strings.closeOtherTabs, () -> {
+                closeDialog();
+                ArrayList<Integer> toClose = new ArrayList<>();
+                for (Tab tab : tabs) if (tab.id != id) toClose.add(tab.id);
+                for (int tid : toClose) closeTab(tid);
+            });
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private Tab tab() {
+        try {
+            for (Tab t : tabs) if (t.id == currentTab) return t;
+        } catch (Exception e) {}
+        return null;
+    }
+
+    // ========== NAVIGATION ==========
+
+    private void go(String q) {
+        if (q == null) return;
+        String url = q.trim();
+        if (url.isEmpty()) return;
+        
+        try {
+            if (!isNetworkAvailable()) { 
+                showOfflineGame(); 
+                return; 
+            }
+            
+            hideOfflineGame();
+            
+            if (parentalControl && isSiteBlocked(url)) {
+                toast(Strings.siteBlocked);
+                return;
+            }
+            
+            if (httpsForce && url.startsWith("http://") && !url.contains("localhost") && !url.contains("127.0.0.1")) {
+                url = url.replace("http://", "https://");
+            }
+            
+            if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("file://") && !url.startsWith("data:")) {
+                if (isUrl(url)) {
+                    url = "https://" + url;
+                } else { 
+                    search(url); 
+                    return; 
+                }
+            }
+            
+            Tab t = tab();
+            if (t == null) {
+                newTab(url, Strings.loading);
+                return;
+            }
+            
+            if (t.home) {
+                t.home = false;
+                if (homeView != null) homeView.setVisibility(View.GONE);
+                t.wv = makeWeb();
+                if (t.wv == null) {
+                    t.home = true;
+                    if (homeView != null) homeView.setVisibility(View.VISIBLE);
+                    toast(Strings.error);
+                    return;
+                }
+                t.wv.setVisibility(View.VISIBLE);
+                if (t.favicon != null) t.favicon.setImageDrawable(icon(IC_GLOBE, cDim));
+            }
+            
+            if (t.wv == null) {
+                t.wv = makeWeb();
+                if (t.wv == null) {
+                    toast(Strings.error);
+                    return;
+                }
+                t.wv.setVisibility(View.VISIBLE);
+            }
+            
+            final String finalUrl = url;
+            t.url = finalUrl;
+            t.wv.loadUrl(finalUrl);
+            
+            if (urlInput != null) urlInput.setText(finalUrl);
+            if (!incognito) addToHistory(finalUrl, t.title);
+            
+        } catch (Exception e) {
+            toast(Strings.error);
+        }
+    }
+
+    private boolean isUrl(String s) {
+        if (s == null || s.isEmpty()) return false;
+        return s.contains(".") && !s.contains(" ") &&
+            (s.matches("^[a-zA-Z0-9][a-zA-Z0-9-]*\\.[a-zA-Z]{2,}.*") ||
+             s.matches("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}.*"));
+    }
+
+    private boolean isSiteBlocked(String url) {
+        if (url == null) return false;
+        try {
+            String domain = new URL(url).getHost();
+            if (domain != null) {
+                domain = domain.toLowerCase();
+                for (String blocked : blockedSites) {
+                    if (blocked != null && domain.contains(blocked.toLowerCase())) return true;
+                }
+            }
+        } catch (Exception e) {}
+        return false;
+    }
+
+    private void search(String query) {
+        if (query == null || query.isEmpty()) return;
+        try {
+            if (!isNetworkAvailable()) { showOfflineGame(); return; }
+            String url;
+            switch (searchEngine) {
+                case "bing": url = "https://www.bing.com/search?q="; break;
+                case "duckduckgo": url = "https://duckduckgo.com/?q="; break;
+                case "yahoo": url = "https://search.yahoo.com/search?p="; break;
+                case "yandex": url = "https://yandex.ru/search/?text="; break;
+                case "ecosia": url = "https://www.ecosia.org/search?q="; break;
+                case "startpage": url = "https://www.startpage.com/search?q="; break;
+                default: url = "https://www.google.com/search?q=";
+            }
+            go(url + Uri.encode(query));
+        } catch (Exception e) {}
+    }
+
+    private void addToHistory(String url, String title) {
+        try {
+            if (url == null || incognito) return;
+            hist.add(0, new HistoryItem(url, title != null ? title : url, System.currentTimeMillis()));
+            while (hist.size() > 1000) hist.remove(hist.size() - 1);
+        } catch (Exception e) {}
+    }
+
+    private void back() { 
+        try { Tab t = tab(); if (t != null && t.wv != null && t.wv.canGoBack()) t.wv.goBack(); } catch (Exception e) {} 
+    }
+    
+    private void fwd() { 
+        try { Tab t = tab(); if (t != null && t.wv != null && t.wv.canGoForward()) t.wv.goForward(); } catch (Exception e) {} 
+    }
+    
+    private void refresh() { 
+        try { 
+            Tab t = tab(); 
+            if (t != null && t.wv != null) { 
+                if (!isNetworkAvailable()) showOfflineGame(); 
+                else t.wv.reload(); 
+            }
+        } catch (Exception e) {} 
+    }
+
+    private void goHome() {
+        try {
+            hideOfflineGame();
+            Tab t = tab();
+            if (t != null && !t.home) {
+                if (t.wv != null) {
+                    t.wv.setVisibility(View.GONE);
+                    try { t.wv.onPause(); } catch (Exception e) {}
+                }
+                t.home = true; 
+                t.url = "home"; 
+                t.title = Strings.home; 
+                if (t.tt != null) t.tt.setText(Strings.home);
+                if (t.favicon != null) t.favicon.setImageDrawable(icon(IC_HOME, cDim));
+                if (homeView != null) {
+                    if (homeView.getParent() == null && content != null) content.addView(homeView);
+                    homeView.setVisibility(View.VISIBLE);
+                }
+                if (urlInput != null) urlInput.setText("");
+                updateSecurityIcon("home");
+                updateBookmarkIcon("home");
+            }
+        } catch (Exception e) {}
+    }
+
+    private void toggleBookmark() { 
+        try { Tab t = tab(); if (t != null && !t.home) toggleBookmark(t.url); } catch (Exception e) {} 
+    }
+
+    private void toggleBookmark(String url) {
+        try {
+            if (url == null || url.equals("home")) return;
+            if (marks.contains(url)) { 
+                marks.remove(url); 
+                toast(Strings.bookmarkRemoved); 
+            } else { 
+                marks.add(url); 
+                toast(Strings.bookmarkAdded); 
+            }
+            save();
+            updateBookmarkIcon(url);
+        } catch (Exception e) {}
+    }
+
+    private String ua() {
+        try {
+            if (customUserAgent != null && !customUserAgent.isEmpty()) return customUserAgent;
+            
+            if (desktop) {
+                return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
+            }
+            
+            String androidVersion = Build.VERSION.RELEASE;
+            String model = Build.MODEL;
+            if (model != null) model = model.replace(" ", "_");
+            else model = "Pixel_7";
+            
+            return "Mozilla/5.0 (Linux; Android " + androidVersion + "; " + model + ") AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36";
+        } catch (Exception e) {
+            return "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36";
+        }
+    }
+
+    // ========== WEBVIEW CLIENTS ==========
+
+    private class WC extends WebViewClient {
+        
+        @Override
+        public void onReceivedError(WebView v, int code, String desc, String url) {
+            try {
+                if (code == ERROR_HOST_LOOKUP || code == ERROR_CONNECT || code == ERROR_TIMEOUT) {
+                    if (!isNetworkAvailable()) {
+                        showOfflineGame();
+                    }
+                }
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public void onReceivedError(WebView v, android.webkit.WebResourceRequest request, android.webkit.WebResourceError error) {
+            try {
+                if (request != null && request.isForMainFrame()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        int code = error.getErrorCode();
+                        if (code == ERROR_HOST_LOOKUP || code == ERROR_CONNECT || code == ERROR_TIMEOUT) {
+                            if (!isNetworkAvailable()) {
+                                showOfflineGame();
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public void onReceivedHttpError(WebView v, android.webkit.WebResourceRequest request, android.webkit.WebResourceResponse response) {
+            // Игнорируем HTTP ошибки для ресурсов - не показываем пользователю
+        }
+        
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest req) {
+            try {
+                if (req == null || req.getUrl() == null) return false;
+                return handleUrl(v, req.getUrl().toString());
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView v, String url) {
+            return handleUrl(v, url);
+        }
+        
+        private boolean handleUrl(WebView v, String url) {
+            try {
+                if (url == null || url.isEmpty()) return false;
+                
+                // Специальные схемы - открываем в приложениях
+                if (url.startsWith("tel:") || url.startsWith("mailto:") || url.startsWith("sms:") ||
+                    url.startsWith("intent://") || url.startsWith("market:") || url.startsWith("tg:") ||
+                    url.startsWith("whatsapp:") || url.startsWith("viber:") || url.startsWith("telegram:")) {
+                    try { 
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent); 
+                    }
+                    catch (Exception e) { toast(Strings.cannotOpenLink); }
+                    return true;
+                }
+                
+                // Проверка сети
+                if (!isNetworkAvailable()) { 
+                    showOfflineGame(); 
+                    return true; 
+                }
+                
+                // Родительский контроль
+                if (parentalControl && isSiteBlocked(url)) {
+                    toast(Strings.siteBlocked);
+                    return true;
+                }
+                
+                // HTTPS форсинг (исключаем localhost)
+                if (httpsForce && url.startsWith("http://") && 
+                    !url.contains("localhost") && !url.contains("127.0.0.1") && !url.contains("192.168.")) {
+                    v.loadUrl(url.replace("http://", "https://"));
+                    return true;
+                }
+                
+                return false;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest req) {
+            try {
+                if (req == null || req.getUrl() == null) {
+                    return super.shouldInterceptRequest(v, req);
+                }
+                
+                String url = req.getUrl().toString();
+                
+                // Не блокируем критические ресурсы
+                if (adBlock.isCritical(url)) {
+                    return super.shouldInterceptRequest(v, req);
+                }
+                
+                String pageUrl = null;
+                try {
+                    pageUrl = v.getUrl();
+                } catch (Exception e) {}
+                
+                // Не блокируем если страница в whitelist
+                if (pageUrl != null && (adBlock.isWhitelisted(pageUrl) || adBlock.isCritical(pageUrl))) {
+                    return super.shouldInterceptRequest(v, req);
+                }
+                
+                // Проверка блокировки
+                if (url != null && adBlock.shouldBlock(url, pageUrl)) {
+                    dataSaved += 50000;
+                    return new WebResourceResponse("text/plain", "UTF-8", null);
+                }
+            } catch (Exception e) {}
+            
+            return super.shouldInterceptRequest(v, req);
+        }
+        
+        @Override
+        public void onPageStarted(WebView v, String url, Bitmap f) {
+            try {
+                hideOfflineGame();
+                if (loadBar != null) {
+                    loadBar.setVisibility(View.VISIBLE);
+                    loadBar.setProgress(0);
+                }
+                sessionAdsBlocked = 0;
+                
+                Tab t = findTab(v);
+                if (t != null) {
+                    t.url = url;
+                    if (t.id == currentTab) {
+                        if (urlInput != null) urlInput.setText(url != null ? url : "");
+                        updateSecurityIcon(url);
+                        updateBookmarkIcon(url);
+                    }
+                }
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public void onPageFinished(WebView v, String url) {
+            try {
+                if (loadBar != null) loadBar.setVisibility(View.GONE);
+                pagesLoaded++;
+                
+                Tab t = findTab(v);
+                if (t != null) {
+                    try {
+                        String title = v.getTitle();
+                        if (title != null && !title.isEmpty() && !title.equals(url) && !title.startsWith("http")) {
+                            t.title = title;
+                            if (t.tt != null) t.tt.setText(title);
+                            if (!incognito && url != null) {
+                                for (HistoryItem h : hist) {
+                                    if (url.equals(h.url)) { h.title = title; break; }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {}
+                }
+                
+                // Инъекция скриптов
+                try {
+                    // 1. Compatibility JS - для обхода детекта WebView
+                    v.evaluateJavascript(getCompatibilityJS(), null);
+                    
+                    // 2. AdBlock CSS
+                    if (url != null && !url.isEmpty() && blockAds) {
+                        try {
+                            String domain = new URL(url).getHost();
+                            if (domain != null && !adBlock.isCritical(url) && !adBlock.isWhitelisted(url)) {
+                                v.evaluateJavascript(adBlock.getCosmeticFiltersJS(domain), null);
+                            }
+                        } catch (Exception e) {}
+                    }
+                    
+                    // 3. Ночной режим
+                    if (darkPage) {
+                        v.evaluateJavascript(
+                            "(function(){try{" +
+                            "document.documentElement.style.filter='invert(0.9) hue-rotate(180deg)';" +
+                            "document.documentElement.style.background='#111';" +
+                            "var imgs=document.querySelectorAll('img,video,canvas,picture,svg');" +
+                            "for(var i=0;i<imgs.length;i++){imgs[i].style.filter='invert(1) hue-rotate(180deg)';}" +
+                            "}catch(e){}})();", null);
+                    }
+                } catch (Exception e) {}
+                
+                save();
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public void onReceivedSslError(WebView v, android.webkit.SslErrorHandler h, android.net.http.SslError e) {
+            try {
+                // Для безопасности - отменяем SSL ошибки
+                // Но показываем пользователю информацию
+                h.cancel();
+                toast(Strings.sslError);
+            } catch (Exception ex) {}
+        }
+        
+		@Override
+        public boolean onRenderProcessGone(WebView v, android.webkit.RenderProcessGoneDetail detail) {
+            try {
+                Tab t = findTab(v);
+                if (t != null) {
+                    if (content != null && t.wv != null) {
+                        content.removeView(t.wv);
+                    }
+                    t.wv = makeWeb();
+                    if (t.wv != null && t.url != null && !t.url.equals("home")) {
+                        t.wv.setVisibility(View.VISIBLE);
+                        t.wv.loadUrl(t.url);
+                    }
+                    toast(Strings.pageReloading);
+                }
+            } catch (Exception ex) {}
+            return true;
+        }
+        
+        @Override
+        public void doUpdateVisitedHistory(WebView v, String url, boolean isReload) {
+            try {
+                Tab t = findTab(v);
+                if (t != null && url != null) {
+                    t.url = url;
+                    if (t.id == currentTab && urlInput != null) {
+                        urlInput.setText(url);
+                    }
+                }
+            } catch (Exception e) {}
+        }
+        
+        Tab findTab(WebView wv) {
+            try {
+                for (Tab t : tabs) if (t.wv == wv) return t;
+            } catch (Exception e) {}
+            return null;
+        }
+    }
+
+    private String getCompatibilityJS() {
+        return "(function(){" +
+            "try{" +
+            // Удаляем признаки WebView
+            "try{delete window.Android;}catch(e){}" +
+            "try{delete window.androidInterface;}catch(e){}" +
+            "try{delete window._cordovaNative;}catch(e){}" +
+            
+            // Скрываем webdriver
+            "Object.defineProperty(navigator,'webdriver',{get:function(){return undefined},configurable:true});" +
+            
+            // Chrome объект
+            "if(!window.chrome){window.chrome={};}" +
+            "window.chrome.app={isInstalled:false,getDetails:function(){return null},getIsInstalled:function(){return false},installState:function(){return'not_installed'},runningState:function(){return'cannot_run'}};" +
+            "window.chrome.runtime={id:undefined,connect:function(){},sendMessage:function(){},onMessage:{addListener:function(){}},onConnect:{addListener:function(){}}};" +
+            "window.chrome.csi=function(){return{pageT:performance.now(),startE:performance.timing.navigationStart,onloadT:performance.timing.domContentLoadedEventEnd}};" +
+            "window.chrome.loadTimes=function(){return{commitLoadTime:performance.timing.responseStart/1000,connectionInfo:'http/1.1',finishDocumentLoadTime:performance.timing.domContentLoadedEventEnd/1000,finishLoadTime:performance.timing.loadEventEnd/1000,firstPaintAfterLoadTime:0,firstPaintTime:performance.timing.domContentLoadedEventEnd/1000,navigationType:'Other',npnNegotiatedProtocol:'unknown',requestTime:performance.timing.navigationStart/1000,startLoadTime:performance.timing.navigationStart/1000,wasAlternateProtocolAvailable:false,wasFetchedViaSpdy:false,wasNpnNegotiated:false}};" +
+            
+            // Plugins
+            "Object.defineProperty(navigator,'plugins',{get:function(){var p=[{name:'Chrome PDF Plugin',filename:'internal-pdf-viewer',description:'PDF',length:1},{name:'Chrome PDF Viewer',filename:'mhjfbmdgcfjbbpaeojofohoefgiehjai',description:'',length:1},{name:'Native Client',filename:'internal-nacl-plugin',description:'',length:2}];p.item=function(i){return this[i]||null};p.namedItem=function(n){for(var i=0;i<this.length;i++)if(this[i].name===n)return this[i];return null};p.refresh=function(){};return p;},configurable:true});" +
+            
+            // MimeTypes
+            "Object.defineProperty(navigator,'mimeTypes',{get:function(){var m=[{type:'application/pdf',suffixes:'pdf',description:'PDF',enabledPlugin:navigator.plugins[0]}];m.item=function(i){return this[i]||null};m.namedItem=function(n){for(var i=0;i<this.length;i++)if(this[i].type===n)return this[i];return null};return m;},configurable:true});" +
+            
+            // Languages
+            "Object.defineProperty(navigator,'languages',{get:function(){return['ru-RU','ru','en-US','en']},configurable:true});" +
+            "Object.defineProperty(navigator,'language',{get:function(){return'ru-RU'},configurable:true});" +
+            
+            // Platform
+            "Object.defineProperty(navigator,'platform',{get:function(){return'Linux armv8l'},configurable:true});" +
+            "Object.defineProperty(navigator,'vendor',{get:function(){return'Google Inc.'},configurable:true});" +
+            "Object.defineProperty(navigator,'vendorSub',{get:function(){return''},configurable:true});" +
+            "Object.defineProperty(navigator,'product',{get:function(){return'Gecko'},configurable:true});" +
+            "Object.defineProperty(navigator,'productSub',{get:function(){return'20030107'},configurable:true});" +
+            
+            // Hardware
+            "Object.defineProperty(navigator,'hardwareConcurrency',{get:function(){return 8},configurable:true});" +
+            "Object.defineProperty(navigator,'deviceMemory',{get:function(){return 8},configurable:true});" +
+            "Object.defineProperty(navigator,'maxTouchPoints',{get:function(){return 5},configurable:true});" +
+            
+            // Connection
+            "if(!navigator.connection){Object.defineProperty(navigator,'connection',{get:function(){return{effectiveType:'4g',rtt:50,downlink:10,saveData:false,type:'wifi'}},configurable:true})}" +
+            
+            // WebGL
+            "try{var gp=WebGLRenderingContext.prototype.getParameter;WebGLRenderingContext.prototype.getParameter=function(p){if(p===37445)return'Google Inc. (Qualcomm)';if(p===37446)return'ANGLE (Qualcomm, Adreno (TM) 730, OpenGL ES 3.2)';return gp.apply(this,arguments)}}catch(e){}" +
+            "try{var gp2=WebGL2RenderingContext.prototype.getParameter;WebGL2RenderingContext.prototype.getParameter=function(p){if(p===37445)return'Google Inc. (Qualcomm)';if(p===37446)return'ANGLE (Qualcomm, Adreno (TM) 730, OpenGL ES 3.2)';return gp2.apply(this,arguments)}}catch(e){}" +
+            
+            // Screen
+            "Object.defineProperty(screen,'availWidth',{get:function(){return screen.width},configurable:true});" +
+            "Object.defineProperty(screen,'availHeight',{get:function(){return screen.height},configurable:true});" +
+            "Object.defineProperty(screen,'colorDepth',{get:function(){return 24},configurable:true});" +
+            "Object.defineProperty(screen,'pixelDepth',{get:function(){return 24},configurable:true});" +
+            
+            // Battery API
+            "if(navigator.getBattery){navigator.getBattery=function(){return Promise.resolve({charging:true,chargingTime:0,dischargingTime:Infinity,level:1,onchargingchange:null,onchargingtimechange:null,ondischargingtimechange:null,onlevelchange:null})}}" +
+            
+            // Permissions
+            "if(window.Permissions&&Permissions.prototype.query){var origQuery=Permissions.prototype.query;Permissions.prototype.query=function(o){if(o&&o.name==='notifications')return Promise.resolve({state:Notification.permission||'default',onchange:null});return origQuery.apply(this,arguments)}}" +
+            
+            // Notification
+            "if(!window.Notification){window.Notification={permission:'default',requestPermission:function(){return Promise.resolve('default')}}}" +
+            
+            // Speech
+            "if(!window.speechSynthesis){window.speechSynthesis={getVoices:function(){return[]},speak:function(){},cancel:function(){},pause:function(){},resume:function(){}}}" +
+            
+            // Credentials
+            "if(!navigator.credentials){Object.defineProperty(navigator,'credentials',{get:function(){return{get:function(){return Promise.resolve(null)},store:function(){return Promise.resolve()},create:function(){return Promise.resolve(null)},preventSilentAccess:function(){return Promise.resolve()}}},configurable:true})}" +
+            
+            // USB
+            "if(!navigator.usb){Object.defineProperty(navigator,'usb',{get:function(){return{getDevices:function(){return Promise.resolve([])}}},configurable:true})}" +
+            
+            // Bluetooth
+            "if(!navigator.bluetooth){Object.defineProperty(navigator,'bluetooth',{get:function(){return{getAvailability:function(){return Promise.resolve(false)}}},configurable:true})}" +
+            
+            // Media Devices
+            "if(navigator.mediaDevices&&navigator.mediaDevices.enumerateDevices){var origEnum=navigator.mediaDevices.enumerateDevices.bind(navigator.mediaDevices);navigator.mediaDevices.enumerateDevices=function(){return origEnum().then(function(d){return d.length?d:[{deviceId:'default',kind:'audioinput',label:'',groupId:'default'},{deviceId:'default',kind:'videoinput',label:'',groupId:'default'},{deviceId:'default',kind:'audiooutput',label:'',groupId:'default'}]})}}" +
+            
+            // Canvas fingerprint protection
+            "try{var origToDataURL=HTMLCanvasElement.prototype.toDataURL;HTMLCanvasElement.prototype.toDataURL=function(){if(this.width>16&&this.height>16){var ctx=this.getContext('2d');if(ctx){var imgData=ctx.getImageData(0,0,Math.min(10,this.width),Math.min(10,this.height));for(var i=0;i<imgData.data.length;i+=4){imgData.data[i]=imgData.data[i]^(Math.random()*2|0);}ctx.putImageData(imgData,0,0);}}return origToDataURL.apply(this,arguments);}}catch(e){}" +
+            
+            // Защита toString
+            "try{var nativeToString=Function.prototype.toString;Function.prototype.toString=function(){if(this===Function.prototype.toString)return'function toString() { [native code] }';var name=this.name||'';if(name==='getParameter'||name==='query'||name==='toDataURL')return'function '+name+'() { [native code] }';return nativeToString.call(this)}}catch(e){}" +
+            
+            "}catch(e){}" +
+            "})();";
+    }
+
+    private class CC extends WebChromeClient {
+        
+        @Override
+        public void onProgressChanged(WebView v, int p) {
+            try {
+                if (loadBar != null) {
+                    loadBar.setProgress(p);
+                    if (p == 100) loadBar.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public void onReceivedTitle(WebView v, String t) {
+            try {
+                Tab tab = findTab(v);
+                if (tab != null && t != null && !t.isEmpty() && !t.startsWith("http")) { 
+                    tab.title = t; 
+                    if (tab.tt != null) tab.tt.setText(t); 
+                }
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public void onReceivedIcon(WebView v, Bitmap ic) {
+            try {
+                if (ic == null) return;
+                Tab t = findTab(v);
+                if (t != null && t.favicon != null) t.favicon.setImageBitmap(ic);
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public void onShowCustomView(View v, CustomViewCallback cb) {
+            try {
+                if (customView != null) { 
+                    cb.onCustomViewHidden(); 
+                    return; 
+                }
+                customView = v; 
+                customViewCallback = cb;
+                if (mainLayout != null) mainLayout.setVisibility(View.GONE);
+                if (fullscreenContainer != null) {
+                    fullscreenContainer.setVisibility(View.VISIBLE);
+                    fullscreenContainer.addView(v, new FrameLayout.LayoutParams(-1, -1));
+                }
+                fullscreen();
+                isFullscreen = true;
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public void onHideCustomView() {
+            try {
+                if (customView == null) return;
+                if (fullscreenContainer != null) {
+                    fullscreenContainer.removeView(customView);
+                    fullscreenContainer.setVisibility(View.GONE);
+                }
+                if (mainLayout != null) mainLayout.setVisibility(View.VISIBLE);
+                if (customViewCallback != null) customViewCallback.onCustomViewHidden();
+                customView = null; 
+                customViewCallback = null;
+                isFullscreen = false;
+                fullscreen();
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public void onPermissionRequest(PermissionRequest request) {
+            try {
+                if (request == null) return;
+                String[] resources = request.getResources();
+                if (resources == null) {
+                    request.deny();
+                    return;
+                }
+                ArrayList<String> granted = new ArrayList<>();
+                for (String r : resources) {
+                    if (r != null && (
+                        r.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE) ||
+                        r.equals(PermissionRequest.RESOURCE_AUDIO_CAPTURE) ||
+                        r.equals(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID) ||
+                        r.equals("android.webkit.resource.MIDI_SYSEX"))) {
+                        granted.add(r);
+                    }
+                }
+                if (!granted.isEmpty()) {
+                    request.grant(granted.toArray(new String[0]));
+                } else {
+                    request.deny();
+                }
+            } catch (Exception e) {
+                try { request.deny(); } catch (Exception ex) {}
+            }
+        }
+        
+        @Override
+        public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+            try { 
+                if (callback != null) callback.invoke(origin, true, false); 
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public boolean onShowFileChooser(WebView w, ValueCallback<Uri[]> cb, FileChooserParams p) {
+            try {
+                if (uploadCallback != null) {
+                    uploadCallback.onReceiveValue(null);
+                }
+                uploadCallback = cb;
+                Intent intent = p.createIntent();
+                startActivityForResult(intent, REQUEST_FILE); 
+                return true;
+            } catch (Exception e) { 
+                if (uploadCallback != null) {
+                    uploadCallback.onReceiveValue(null);
+                }
+                uploadCallback = null; 
+                return false; 
+            }
+        }
+        
+        @Override
+        public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+            try {
+                if (isUserGesture && resultMsg != null) {
+                    WebView.HitTestResult result = view.getHitTestResult();
+                    String url = result != null ? result.getExtra() : null;
+                    
+                    if (url != null && !url.isEmpty()) {
+                        newTab(url, Strings.newTab);
+                        return false;
+                    }
+                    
+                    WebView newWebView = new WebView(MainActivity.this);
+                    newWebView.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView v, String url) {
+                            newTab(url, Strings.newTab);
+                            return true;
+                        }
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest req) {
+                            if (req != null && req.getUrl() != null) {
+                                newTab(req.getUrl().toString(), Strings.newTab);
+                            }
+                            return true;
+                        }
+                    });
+                    
+                    WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                    transport.setWebView(newWebView);
+                    resultMsg.sendToTarget();
+                    return true;
+                }
+            } catch (Exception e) {}
+            return false;
+        }
+        
+        @Override
+        public void onCloseWindow(WebView window) {
+            try {
+                Tab t = findTab(window);
+                if (t != null) {
+                    closeTab(t.id);
+                }
+            } catch (Exception e) {}
+        }
+        
+        @Override
+        public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+            // Скрываем консольные сообщения
+            return true;
+        }
+        
+        @Override
+        public boolean onJsAlert(WebView view, String url, String message, android.webkit.JsResult result) {
+            try {
+                if (result != null) result.confirm();
+                if (message != null && !message.isEmpty()) {
+                    toast(message.length() > 100 ? message.substring(0, 100) + "..." : message);
+                }
+            } catch (Exception e) {}
+            return true;
+        }
+        
+        @Override
+        public boolean onJsConfirm(WebView view, String url, String message, android.webkit.JsResult result) {
+            try {
+                if (result != null) result.confirm();
+            } catch (Exception e) {}
+            return true;
+        }
+        
+        @Override
+        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, android.webkit.JsPromptResult result) {
+            try {
+                if (result != null) result.confirm(defaultValue);
+            } catch (Exception e) {}
+            return true;
+        }
+        
+        Tab findTab(WebView w) { 
+            try {
+                for (Tab t : tabs) if (t.wv == w) return t; 
+            } catch (Exception e) {}
+            return null; 
+        }
+    }
+
+    // ========== DIALOGS ==========
+
+    private void openDialog(View v) {
+        try {
+            if (dialog == null || overlay == null) return;
+            dialog.removeAllViews();
+            dialog.addView(v);
+            overlay.setVisibility(View.VISIBLE);
+            dialog.setVisibility(View.VISIBLE);
+            overlay.animate().alpha(1f).setDuration(200).start();
+            dialog.setScaleX(0.92f);
+            dialog.setScaleY(0.92f);
+            dialog.setAlpha(0f);
+            dialog.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(200).start();
+        } catch (Exception e) {}
+    }
+
+    private void closeDialog() {
+        try {
+            if (dialog == null || overlay == null) return;
+            dialog.animate().scaleX(0.92f).scaleY(0.92f).alpha(0f).setDuration(150).withEndAction(() -> {
+                try {
+                    overlay.setVisibility(View.GONE);
+                    dialog.setVisibility(View.GONE);
+                    dialog.removeAllViews();
+                } catch (Exception e) {}
+            }).start();
+            overlay.animate().alpha(0f).setDuration(150).start();
+        } catch (Exception e) {}
+    }
+
+    private LinearLayout dialogBase(String title, int iconType) {
+        LinearLayout d = new LinearLayout(this);
+        try {
+            d.setOrientation(LinearLayout.VERTICAL);
+            d.setBackgroundDrawable(roundRect(cCard, 20));
+            d.setPadding(dp(20), dp(18), dp(20), dp(20));
+            d.setElevation(dp(16));
+            d.setOnClickListener(v -> {});
+            
+            LinearLayout h = new LinearLayout(this);
+            h.setOrientation(LinearLayout.HORIZONTAL);
+            h.setGravity(Gravity.CENTER_VERTICAL);
+            h.setPadding(0, 0, 0, dp(16));
+            
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(24), dp(24)));
+            ic.setImageDrawable(icon(iconType, cPrimary));
+            LinearLayout.LayoutParams icp = new LinearLayout.LayoutParams(dp(24), dp(24));
+            icp.setMargins(0, 0, dp(10), 0);
+            ic.setLayoutParams(icp);
+            
+            TextView t = new TextView(this);
+            t.setText(title != null ? title : "");
+            t.setTextColor(cText);
+            t.setTextSize(20);
+            t.setTypeface(null, Typeface.BOLD);
+            t.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
+            
+            ImageView x = new ImageView(this);
+            x.setLayoutParams(new LinearLayout.LayoutParams(dp(28), dp(28)));
+            x.setImageDrawable(icon(IC_CLOSE, cDim));
+            x.setBackgroundDrawable(ripple(circle(0x20FFFFFF)));
+            x.setPadding(dp(4), dp(4), dp(4), dp(4));
+            x.setOnClickListener(v -> { click(v); closeDialog(); });
+            
+            h.addView(ic);
+            h.addView(t);
+            h.addView(x);
+            d.addView(h);
+        } catch (Exception e) {}
+        return d;
+    }
+
+    private void showMenu() {
+        try {
+            LinearLayout d = dialogBase(Strings.menu, IC_MENU);
+            
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(380)));
+            LinearLayout content = new LinearLayout(this);
+            content.setOrientation(LinearLayout.VERTICAL);
+            
+            addAction(content, IC_PLUS, Strings.newTab, () -> { newTab("home", Strings.newTab); closeDialog(); });
+            addAction(content, IC_SEARCH, Strings.findOnPage, () -> { closeDialog(); showFindBar(); });
+            addAction(content, IC_SHARE, Strings.sharePage, () -> { Tab t = tab(); if (t != null && !t.home) sharePage(t.url, t.title); closeDialog(); });
+            addAction(content, IC_TEXT, Strings.readerMode, () -> { closeDialog(); toggleReaderMode(); });
+            addAction(content, IC_CODE, Strings.viewSource, () -> { closeDialog(); viewSource(); });
+            addAction(content, IC_SAVE, Strings.savePage, () -> { closeDialog(); savePageOffline(); });
+            addAction(content, IC_DOWNLOAD, Strings.downloads, () -> { closeDialog(); showDownloads(); });
+            addAction(content, IC_CLOCK, Strings.history, () -> { closeDialog(); showHist(); });
+            addAction(content, IC_KEY, Strings.passwords, () -> { closeDialog(); showPasswords(); });
+            addAction(content, IC_STATS, Strings.statistics, () -> { closeDialog(); showStatistics(); });
+            addAction(content, IC_MIC, Strings.voiceSearch, () -> { closeDialog(); startVoiceSearch(); });
+            addAction(content, IC_CAMERA, Strings.screenshot, () -> { closeDialog(); takeScreenshot(); });
+            addAction(content, IC_PRINT, Strings.printPage, () -> { closeDialog(); printPage(); });
+            addAction(content, IC_TRANSLATE, Strings.translatePage, () -> { closeDialog(); translatePage(); });
+            
+            addDivider(content);
+            
+            addToggle(content, IC_EYE_OFF, Strings.incognitoMode, incognito, b -> {
+                incognito = b;
+                toast(b ? Strings.incognitoOn : Strings.incognitoOff);
+            });
+            addToggle(content, IC_GLOBE, Strings.desktopMode, desktop, b -> {
+                desktop = b;
+                Tab t = tab();
+                if (t != null && t.wv != null) { 
+                    t.wv.getSettings().setUserAgentString(ua()); 
+                    t.wv.reload(); 
+                }
+            });
+            addToggle(content, IC_MOON, Strings.nightMode, darkPage, b -> { closeDialog(); toggleNightMode(); });
+            addToggle(content, IC_ZAP, Strings.turboMode, turboMode, b -> { 
+                turboMode = b; 
+                save(); 
+                toast(b ? Strings.turboOn : Strings.turboOff); 
+            });
+            
+            sv.addView(content);
+            d.addView(sv);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    // ========== NEW FEATURES ==========
+
+    private void startVoiceSearch() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO);
+                    return;
+                }
+            }
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ru-RU");
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, Strings.speak);
+            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+            startActivityForResult(intent, REQUEST_VOICE);
+        } catch (Exception e) {
+            toast(Strings.voiceNotSupported);
+        }
+    }
+
+    private void takeScreenshot() {
+        try {
+            Tab t = tab();
+            if (t == null || t.wv == null || t.home) {
+                toast(Strings.nothingToSave);
+                return;
+            }
+            
+            Bitmap bitmap = null;
+            try {
+                t.wv.setDrawingCacheEnabled(true);
+                t.wv.buildDrawingCache(true);
+                bitmap = Bitmap.createBitmap(t.wv.getDrawingCache());
+                t.wv.setDrawingCacheEnabled(false);
+            } catch (Exception e) {
+                // Fallback
+                try {
+                    bitmap = Bitmap.createBitmap(t.wv.getWidth(), t.wv.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap);
+                    t.wv.draw(canvas);
+                } catch (Exception ex) {}
+            }
+            
+            if (bitmap == null) {
+                toast(Strings.screenshotFailed);
+                return;
+            }
+            
+            String fileName = "screenshot_" + System.currentTimeMillis() + ".png";
+            File dir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "PhoenixBrowser");
+            if (!dir.exists()) dir.mkdirs();
+            File file = new File(dir, fileName);
+            
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+            bitmap.recycle();
+            
+            toast(Strings.screenshotSaved + ": " + fileName);
+        } catch (Exception e) {
+            toast(Strings.screenshotFailed);
+        }
+    }
+
+    private void printPage() {
+        try {
+            Tab t = tab();
+            if (t == null || t.wv == null || t.home) {
+                toast(Strings.nothingToView);
+                return;
+            }
+            
+            PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+            if (printManager != null) {
+                String jobName = Strings.appName + " - " + (t.title != null ? t.title : "");
+                PrintDocumentAdapter adapter = t.wv.createPrintDocumentAdapter(jobName);
+                printManager.print(jobName, adapter, null);
+            }
+        } catch (Exception e) {
+            toast(Strings.error);
+        }
+    }
+
+    private void translatePage() {
+        try {
+            Tab t = tab();
+            if (t == null || t.home || t.url == null) {
+                toast(Strings.nothingToView);
+                return;
+            }
+            
+            String translateUrl = "https://translate.google.com/translate?sl=auto&tl=ru&u=" + Uri.encode(t.url);
+            go(translateUrl);
+        } catch (Exception e) {}
+    }
+
+    private void viewSource() {
+        try {
+            Tab t = tab();
+            if (t == null || t.wv == null || t.home) {
+                toast(Strings.nothingToView);
+                return;
+            }
+            
+            t.wv.evaluateJavascript(
+                "(function(){return document.documentElement.outerHTML;})()",
+                html -> {
+                    try {
+                        if (html == null || html.isEmpty() || html.equals("null")) return;
+                        String source = html;
+                        if (source.startsWith("\"") && source.endsWith("\"")) {
+                            source = source.substring(1, source.length() - 1)
+                                .replace("\\n", "\n")
+                                .replace("\\t", "\t")
+                                .replace("\\\"", "\"")
+                                .replace("\\\\", "\\");
+                        }
+                        showSourceDialog(source);
+                    } catch (Exception e) {}
+                }
+            );
+        } catch (Exception e) {}
+    }
+
+    private void showSourceDialog(final String source) {
+        try {
+            LinearLayout d = dialogBase(Strings.pageSource, IC_CODE);
+
+            HorizontalScrollView hsv = new HorizontalScrollView(this);
+            hsv.setLayoutParams(lp(-1, dp(350)));
+            
+            ScrollView sv = new ScrollView(this);
+            sv.setBackgroundDrawable(roundRect(cLight, 8));
+            sv.setPadding(dp(10), dp(10), dp(10), dp(10));
+
+            TextView tv = new TextView(this);
+            tv.setText(source != null ? source : "");
+            tv.setTextColor(cText);
+            tv.setTextSize(11);
+            tv.setTypeface(Typeface.MONOSPACE);
+
+            sv.addView(tv);
+            hsv.addView(sv);
+            d.addView(hsv);
+
+            LinearLayout btns = new LinearLayout(this);
+            btns.setOrientation(LinearLayout.HORIZONTAL);
+            btns.setGravity(Gravity.END);
+            LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(-1, -2);
+            bp.setMargins(0, dp(12), 0, 0);
+            btns.setLayoutParams(bp);
+
+            TextView copy = makeButton(Strings.copy, cPrimary, cLight);
+            copy.setOnClickListener(v -> {
+                try {
+                    if (clipboard != null && source != null) {
+                        clipboard.setPrimaryClip(ClipData.newPlainText("source", source));
+                        toast(Strings.sourceCopied);
+                    }
+                } catch (Exception e) {}
+            });
+
+            btns.addView(copy);
+            d.addView(btns);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void savePageOffline() {
+        try {
+            Tab t = tab();
+            if (t == null || t.wv == null || t.home) {
+                toast(Strings.nothingToSave);
+                return;
+            }
+            
+            t.wv.evaluateJavascript(
+                "(function(){return document.documentElement.outerHTML;})()",
+                html -> {
+                    try {
+                        if (html == null || html.isEmpty() || html.equals("null")) {
+                            handler.post(() -> toast(Strings.saveFailed));
+                            return;
+                        }
+                        String content = html;
+                        if (content.startsWith("\"")) {
+                            content = content.substring(1, content.length() - 1)
+                                .replace("\\n", "\n")
+                                .replace("\\\"", "\"");
+                        }
+                        
+                        String fileName = "page_" + System.currentTimeMillis() + ".html";
+                        File dir = new File(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DOWNLOADS), "PhoenixPages");
+                        if (!dir.exists()) dir.mkdirs();
+                        File file = new File(dir, fileName);
+                        
+                        FileOutputStream fos = new FileOutputStream(file);
+                        fos.write(content.getBytes("UTF-8"));
+                        fos.close();
+                        
+                        final String fn = fileName;
+                        handler.post(() -> toast(Strings.pageSaved + ": " + fn));
+                    } catch (Exception e) {
+                        handler.post(() -> toast(Strings.saveFailed));
+                    }
+                }
+            );
+        } catch (Exception e) {
+            toast(Strings.saveFailed);
+        }
+    }
+
+    private void toggleReaderMode() {
+        try {
+            readerMode = !readerMode;
+            Tab t = tab();
+            if (t == null || t.wv == null || t.home) return;
+
+            if (readerMode) {
+                String js = "(function(){try{" +
+                    "var a=document.querySelector('article')||document.querySelector('[role=\"main\"]')||document.querySelector('main')||document.body;" +
+                    "var c=a.innerHTML,t=document.title;" +
+                    "document.body.innerHTML='<div style=\"max-width:700px;margin:0 auto;padding:20px;font-family:Georgia,serif;font-size:18px;line-height:1.8;color:#333;background:#FFFEF5;\">" +
+                    "<h1 style=\"font-size:28px;margin-bottom:20px;\">'+t+'</h1>'+c+'</div>';" +
+                    "document.body.style.background='#FFFEF5';" +
+                    "document.body.style.margin='0';" +
+                    "}catch(e){}})();";
+                t.wv.evaluateJavascript(js, null);
+                toast(Strings.readerModeOn);
+            } else {
+                t.wv.reload();
+                toast(Strings.readerModeOff);
+            }
+        } catch (Exception e) {}
+    }
+
+    private void toggleNightMode() {
+        try {
+            darkPage = !darkPage;
+            Tab t = tab();
+            if (t != null && t.wv != null && !t.home) {
+                String js = darkPage ?
+                    "(function(){try{" +
+                    "document.documentElement.style.filter='invert(0.9) hue-rotate(180deg)';" +
+                    "document.documentElement.style.background='#111';" +
+                    "var imgs=document.querySelectorAll('img,video,canvas,picture');" +
+                    "for(var i=0;i<imgs.length;i++){imgs[i].style.filter='invert(1) hue-rotate(180deg)';}" +
+                    "}catch(e){}})();" :
+                    "(function(){try{" +
+                    "document.documentElement.style.filter='';" +
+                    "document.documentElement.style.background='';" +
+                    "var imgs=document.querySelectorAll('img,video,canvas,picture');" +
+                    "for(var i=0;i<imgs.length;i++){imgs[i].style.filter='';}" +
+                    "}catch(e){}})();";
+                t.wv.evaluateJavascript(js, null);
+            }
+            toast(darkPage ? Strings.nightModeOn : Strings.nightModeOff);
+        } catch (Exception e) {}
+    }
+
+    private void sharePage(String url, String title) {
+        try {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_TEXT, url != null ? url : "");
+            share.putExtra(Intent.EXTRA_SUBJECT, title != null ? title : "");
+            startActivity(Intent.createChooser(share, Strings.share));
+        } catch (Exception e) {}
+    }
+	    // ========== MORE DIALOGS ==========
+
+    private void showQuickAdBlockMenu() {
+        try {
+            Tab t = tab();
+            if (t == null || t.home) { showAdBlockSettings(); return; }
+
+            LinearLayout d = dialogBase(Strings.adblock, IC_SHIELD_CHECK);
+            String domain = getDomain(t.url);
+            
+            LinearLayout stats = new LinearLayout(this);
+            stats.setOrientation(LinearLayout.HORIZONTAL);
+            stats.setBackgroundDrawable(roundRect(cLight, 12));
+            stats.setPadding(dp(14), dp(12), dp(14), dp(12));
+            stats.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(-1, -2);
+            sp.setMargins(0, 0, 0, dp(12));
+            stats.setLayoutParams(sp);
+
+            ImageView sic = new ImageView(this);
+            sic.setLayoutParams(new LinearLayout.LayoutParams(dp(20), dp(20)));
+            sic.setImageDrawable(icon(IC_SHIELD_CHECK, 0xFF10B981));
+            
+            TextView stxt = new TextView(this);
+            stxt.setText(sessionAdsBlocked + " " + Strings.blockedThisSession);
+            stxt.setTextColor(0xFF10B981);
+            stxt.setTextSize(14);
+            stxt.setPadding(dp(8), 0, 0, 0);
+            
+            stats.addView(sic);
+            stats.addView(stxt);
+            d.addView(stats);
+
+            boolean isWhitelisted = domain != null && adBlock.isWhitelisted(t.url);
+            addToggle(d, IC_SHIELD, Strings.blockAds + " " + (domain != null ? domain : ""), !isWhitelisted, b -> {
+                if (domain != null) {
+                    if (b) adBlock.removeFromWhitelist(domain);
+                    else adBlock.addToWhitelist(domain);
+                    refresh();
+                }
+            });
+
+            addToggle(d, IC_SHIELD_CHECK, Strings.enableAdblock, blockAds, b -> { blockAds = b; save(); });
+            addToggle(d, IC_CLOSE, Strings.blockCookieBanners, blockCookieBanners, b -> { blockCookieBanners = b; save(); refresh(); });
+            addToggle(d, IC_BLOCK, Strings.blockPopups, blockPopups, b -> { blockPopups = b; save(); });
+
+            addDivider(d);
+            
+            if (domain != null) {
+                addAction(d, IC_PLUS, Strings.addRule + " " + domain, () -> { closeDialog(); showAddRuleDialog(domain); });
+                addAction(d, IC_LAYERS, Strings.siteRules, () -> { closeDialog(); showSiteRulesDialog(domain); });
+            }
+            addAction(d, IC_GEAR, Strings.advancedSettings, () -> { closeDialog(); showAdBlockSettings(); });
+
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showAdBlockSettings() {
+        try {
+            LinearLayout d = dialogBase(Strings.adblockPro, IC_SHIELD_CHECK);
+
+            LinearLayout stats = new LinearLayout(this);
+            stats.setOrientation(LinearLayout.VERTICAL);
+            stats.setBackgroundDrawable(roundRect(0x2010B981, 14));
+            stats.setPadding(dp(16), dp(14), dp(16), dp(14));
+            LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(-1, -2);
+            sp.setMargins(0, 0, 0, dp(16));
+            stats.setLayoutParams(sp);
+
+            TextView st = new TextView(this);
+            st.setText(Strings.statistics);
+            st.setTextColor(cText);
+            st.setTextSize(16);
+            st.setTypeface(null, Typeface.BOLD);
+
+            TextView sd = new TextView(this);
+            sd.setText(Strings.adsBlocked + ": " + formatNumber(adsBlocked) + 
+                       "\n" + Strings.trackersBlocked + ": " + formatNumber(trackersBlocked) + 
+                       "\n" + Strings.dataSaved + ": " + formatBytes(dataSaved));
+            sd.setTextColor(cDim);
+            sd.setTextSize(13);
+            sd.setPadding(0, dp(8), 0, 0);
+
+            stats.addView(st);
+            stats.addView(sd);
+            d.addView(stats);
+
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(280)));
+            LinearLayout content = new LinearLayout(this);
+            content.setOrientation(LinearLayout.VERTICAL);
+
+            addToggle(content, IC_SHIELD_CHECK, Strings.enableAdblock, blockAds, b -> { blockAds = b; save(); });
+            addToggle(content, IC_EYE_OFF, Strings.blockTrackers, blockTrack, b -> { blockTrack = b; save(); });
+            addToggle(content, IC_CLOSE, Strings.blockCookieBanners, blockCookieBanners, b -> { blockCookieBanners = b; save(); });
+            addToggle(content, IC_BLOCK, Strings.blockPopups, blockPopups, b -> { blockPopups = b; save(); });
+            addToggle(content, IC_VIDEO, Strings.blockAutoplay, blockAutoplay, b -> { blockAutoplay = b; save(); });
+            
+            addDivider(content);
+            
+            addAction(content, IC_FILTER, Strings.customFilters, () -> { closeDialog(); showCustomFilters(); });
+            addAction(content, IC_CHECK, Strings.whitelist, () -> { closeDialog(); showWhitelist(); });
+            addAction(content, IC_TRASH, Strings.resetStats, () -> {
+                adsBlocked = 0; trackersBlocked = 0; dataSaved = 0; sessionAdsBlocked = 0;
+                save(); toast(Strings.statsReset); closeDialog();
+            });
+
+            sv.addView(content);
+            d.addView(sv);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showAddRuleDialog(final String domain) {
+        try {
+            LinearLayout d = dialogBase(Strings.addRule, IC_PLUS);
+
+            TextView hint = new TextView(this);
+            hint.setText(Strings.enterElementToBlock);
+            hint.setTextColor(cDim);
+            hint.setTextSize(12);
+            hint.setPadding(0, 0, 0, dp(12));
+            d.addView(hint);
+
+            final EditText input = new EditText(this);
+            input.setLayoutParams(lp(-1, dp(48)));
+            input.setBackgroundDrawable(roundRect(cLight, 10));
+            input.setPadding(dp(14), dp(10), dp(14), dp(10));
+            input.setTextColor(cText);
+            input.setHintTextColor(cDim);
+            input.setHint("##.ad-class");
+            input.setSingleLine();
+            d.addView(input);
+
+            LinearLayout btns = new LinearLayout(this);
+            btns.setOrientation(LinearLayout.HORIZONTAL);
+            btns.setGravity(Gravity.END);
+            LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(-1, -2);
+            bp.setMargins(0, dp(16), 0, 0);
+            btns.setLayoutParams(bp);
+
+            TextView cancel = makeButton(Strings.cancel, cDim, cLight);
+            cancel.setOnClickListener(v -> closeDialog());
+
+            TextView add = makeButton(Strings.add, Color.WHITE, cPrimary);
+            LinearLayout.LayoutParams abp = new LinearLayout.LayoutParams(-2, -2);
+            abp.setMargins(dp(10), 0, 0, 0);
+            add.setLayoutParams(abp);
+            add.setOnClickListener(v -> {
+                String rule = input.getText().toString().trim();
+                if (!rule.isEmpty() && domain != null) {
+                    adBlock.addSiteRule(domain, rule);
+                    toast(Strings.ruleAdded);
+                    closeDialog();
+                    refresh();
+                }
+            });
+
+            btns.addView(cancel);
+            btns.addView(add);
+            d.addView(btns);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showSiteRulesDialog(final String domain) {
+        try {
+            LinearLayout d = dialogBase(Strings.siteRules, IC_LAYERS);
+
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(300)));
+            LinearLayout list = new LinearLayout(this);
+            list.setOrientation(LinearLayout.VERTICAL);
+
+            HashSet<String> rules = domain != null ? adBlock.siteSpecificBlocks.get(domain) : null;
+            if (rules == null || rules.isEmpty()) {
+                TextView empty = new TextView(this);
+                empty.setText(Strings.noRulesForSite);
+                empty.setTextColor(cDim);
+                empty.setGravity(Gravity.CENTER);
+                empty.setPadding(0, dp(40), 0, dp(40));
+                list.addView(empty);
+            } else {
+                for (final String rule : new ArrayList<>(rules)) {
+                    addRuleRow(list, rule, () -> {
+                        adBlock.removeSiteRule(domain, rule);
+                        showSiteRulesDialog(domain);
+                        toast(Strings.ruleRemoved);
+                    });
+                }
+            }
+
+            sv.addView(list);
+            d.addView(sv);
+
+            if (domain != null) {
+                TextView addBtn = makeButton("+ " + Strings.addRule, cPrimary, cLight);
+                addBtn.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams abp = new LinearLayout.LayoutParams(-1, -2);
+                abp.setMargins(0, dp(12), 0, 0);
+                addBtn.setLayoutParams(abp);
+                addBtn.setOnClickListener(v -> { closeDialog(); showAddRuleDialog(domain); });
+                d.addView(addBtn);
+            }
+
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void addRuleRow(LinearLayout parent, String rule, Runnable onDelete) {
+        try {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setBackgroundDrawable(ripple(roundRect(cLight, 10)));
+            row.setPadding(dp(14), dp(12), dp(14), dp(12));
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+            rp.setMargins(0, dp(4), 0, 0);
+            row.setLayoutParams(rp);
+
+            TextView tv = new TextView(this);
+            tv.setText(rule != null ? rule : "");
+            tv.setTextColor(cText);
+            tv.setTextSize(13);
+            tv.setSingleLine();
+            tv.setEllipsize(TextUtils.TruncateAt.END);
+            tv.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
+
+            ImageView del = new ImageView(this);
+            del.setLayoutParams(new LinearLayout.LayoutParams(dp(24), dp(24)));
+            del.setImageDrawable(icon(IC_TRASH, 0xFFEF4444));
+            del.setBackgroundDrawable(ripple(circle(0x20EF4444)));
+            del.setOnClickListener(v -> { click(v); if (onDelete != null) onDelete.run(); });
+
+            row.addView(tv);
+            row.addView(del);
+            if (parent != null) parent.addView(row);
+        } catch (Exception e) {}
+    }
+
+    private void showCustomFilters() {
+        try {
+            LinearLayout d = dialogBase(Strings.customFilters, IC_FILTER);
+
+            LinearLayout addRow = new LinearLayout(this);
+            addRow.setOrientation(LinearLayout.HORIZONTAL);
+            addRow.setGravity(Gravity.CENTER_VERTICAL);
+
+            final EditText input = new EditText(this);
+            LinearLayout.LayoutParams ip = new LinearLayout.LayoutParams(0, dp(44), 1f);
+            input.setLayoutParams(ip);
+            input.setBackgroundDrawable(roundRect(cLight, 10));
+            input.setPadding(dp(12), 0, dp(12), 0);
+            input.setTextColor(cText);
+            input.setHintTextColor(cDim);
+            input.setHint("ads.example.com");
+            input.setSingleLine();
+
+            ImageView addBtn = new ImageView(this);
+            LinearLayout.LayoutParams abp = new LinearLayout.LayoutParams(dp(44), dp(44));
+            abp.setMargins(dp(8), 0, 0, 0);
+            addBtn.setLayoutParams(abp);
+            addBtn.setImageDrawable(icon(IC_PLUS, Color.WHITE));
+            addBtn.setBackgroundDrawable(ripple(roundRect(cPrimary, 10)));
+            addBtn.setPadding(dp(10), dp(10), dp(10), dp(10));
+            addBtn.setOnClickListener(v -> {
+                String filter = input.getText().toString().trim();
+                if (!filter.isEmpty() && !customFilters.contains(filter)) {
+                    customFilters.add(filter);
+                    save();
+                    input.setText("");
+                    showCustomFilters();
+                    toast(Strings.filterAdded);
+                }
+            });
+
+            addRow.addView(input);
+            addRow.addView(addBtn);
+            d.addView(addRow);
+
+            ScrollView sv = new ScrollView(this);
+            LinearLayout.LayoutParams svp = new LinearLayout.LayoutParams(-1, dp(250));
+            svp.setMargins(0, dp(12), 0, 0);
+            sv.setLayoutParams(svp);
+            
+            LinearLayout list = new LinearLayout(this);
+            list.setOrientation(LinearLayout.VERTICAL);
+
+            if (customFilters.isEmpty()) {
+                TextView empty = new TextView(this);
+                empty.setText(Strings.noCustomFilters);
+                empty.setTextColor(cDim);
+                empty.setGravity(Gravity.CENTER);
+                empty.setPadding(0, dp(30), 0, dp(30));
+                list.addView(empty);
+            } else {
+                for (final String filter : new ArrayList<>(customFilters)) {
+                    addRuleRow(list, filter, () -> {
+                        customFilters.remove(filter);
+                        save();
+                        showCustomFilters();
+                    });
+                }
+            }
+
+            sv.addView(list);
+            d.addView(sv);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showWhitelist() {
+        try {
+            LinearLayout d = dialogBase(Strings.whitelist, IC_CHECK);
+
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(300)));
+            LinearLayout list = new LinearLayout(this);
+            list.setOrientation(LinearLayout.VERTICAL);
+
+            if (adBlock.whitelist.isEmpty()) {
+                TextView empty = new TextView(this);
+                empty.setText(Strings.noWhitelistedSites);
+                empty.setTextColor(cDim);
+                empty.setGravity(Gravity.CENTER);
+                empty.setPadding(0, dp(40), 0, dp(40));
+                list.addView(empty);
+            } else {
+                for (final String domain : new ArrayList<>(adBlock.whitelist)) {
+                    addRuleRow(list, domain, () -> {
+                        adBlock.removeFromWhitelist(domain);
+                        showWhitelist();
+                        toast(Strings.removedFromWhitelist);
+                    });
+                }
+            }
+
+            sv.addView(list);
+            d.addView(sv);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showSecurity() {
+        try {
+            LinearLayout d = dialogBase(Strings.securityPrivacy, IC_LOCK);
+            
+            int prot = (httpsForce?1:0) + (blockAds?1:0) + (blockTrack?1:0) + (blockFinger?1:0) + (blockRTC?1:0) + (safeMode?1:0);
+            LinearLayout status = new LinearLayout(this);
+            status.setBackgroundDrawable(roundRect(0x2010B981, 12));
+            status.setPadding(dp(14), dp(12), dp(14), dp(12));
+            LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(-1, -2);
+            sp.setMargins(0, 0, 0, dp(12));
+            status.setLayoutParams(sp);
+            TextView st = new TextView(this);
+            st.setText(prot + "/6 " + Strings.protectionsActive);
+            st.setTextColor(0xFF10B981);
+            st.setTextSize(14);
+            status.addView(st);
+            d.addView(status);
+            
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(320)));
+            LinearLayout content = new LinearLayout(this);
+            content.setOrientation(LinearLayout.VERTICAL);
+            
+            addToggle(content, IC_LOCK, Strings.httpsOnly, httpsForce, b -> { httpsForce = b; save(); });
+            addToggle(content, IC_SHIELD_CHECK, Strings.blockAds, blockAds, b -> { blockAds = b; save(); if (adBlockIcon != null) adBlockIcon.setImageDrawable(icon(IC_SHIELD_CHECK, b ? 0xFF10B981 : cDim)); });
+            addToggle(content, IC_EYE_OFF, Strings.blockTrackers, blockTrack, b -> { blockTrack = b; save(); });
+            addToggle(content, IC_USER, Strings.blockFingerprinting, blockFinger, b -> { blockFinger = b; save(); });
+            addToggle(content, IC_GLOBE, Strings.blockWebRTC, blockRTC, b -> { blockRTC = b; save(); });
+            addToggle(content, IC_WARNING, Strings.safeBrowsing, safeMode, b -> { safeMode = b; save(); });
+            addToggle(content, IC_BLOCK, Strings.blockPopups, blockPopups, b -> { blockPopups = b; save(); });
+            addToggle(content, IC_CLOSE, Strings.blockCookieBanners, blockCookieBanners, b -> { blockCookieBanners = b; save(); });
+            addToggle(content, IC_VIDEO, Strings.blockAutoplay, blockAutoplay, b -> { blockAutoplay = b; save(); });
+            
+            addDivider(content);
+            addAction(content, IC_BLOCK, Strings.blockedSites, () -> { closeDialog(); showBlockedSites(); });
+            addAction(content, IC_KEY, Strings.masterPassword, () -> { closeDialog(); showSetMasterPassword(); });
+            
+            sv.addView(content);
+            d.addView(sv);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showBlockedSites() {
+        try {
+            LinearLayout d = dialogBase(Strings.blockedSites, IC_BLOCK);
+            
+            addToggle(d, IC_LOCK, Strings.parentalControl, parentalControl, b -> { parentalControl = b; save(); });
+            
+            addDivider(d);
+            
+            LinearLayout addRow = new LinearLayout(this);
+            addRow.setOrientation(LinearLayout.HORIZONTAL);
+            addRow.setGravity(Gravity.CENTER_VERTICAL);
+
+            final EditText input = new EditText(this);
+            input.setLayoutParams(new LinearLayout.LayoutParams(0, dp(44), 1f));
+            input.setBackgroundDrawable(roundRect(cLight, 10));
+            input.setPadding(dp(12), 0, dp(12), 0);
+            input.setTextColor(cText);
+            input.setHintTextColor(cDim);
+            input.setHint("example.com");
+            input.setSingleLine();
+
+            ImageView addBtn = new ImageView(this);
+            LinearLayout.LayoutParams abp = new LinearLayout.LayoutParams(dp(44), dp(44));
+            abp.setMargins(dp(8), 0, 0, 0);
+            addBtn.setLayoutParams(abp);
+            addBtn.setImageDrawable(icon(IC_PLUS, Color.WHITE));
+            addBtn.setBackgroundDrawable(ripple(roundRect(cPrimary, 10)));
+            addBtn.setPadding(dp(10), dp(10), dp(10), dp(10));
+            addBtn.setOnClickListener(v -> {
+                String site = input.getText().toString().trim().toLowerCase();
+                if (!site.isEmpty() && !blockedSites.contains(site)) {
+                    blockedSites.add(site);
+                    save();
+                    input.setText("");
+                    showBlockedSites();
+                    toast(Strings.siteBlockedAdded);
+                }
+            });
+
+            addRow.addView(input);
+            addRow.addView(addBtn);
+            d.addView(addRow);
+
+            ScrollView sv = new ScrollView(this);
+            LinearLayout.LayoutParams svp = new LinearLayout.LayoutParams(-1, dp(220));
+            svp.setMargins(0, dp(12), 0, 0);
+            sv.setLayoutParams(svp);
+            
+            LinearLayout list = new LinearLayout(this);
+            list.setOrientation(LinearLayout.VERTICAL);
+
+            if (blockedSites.isEmpty()) {
+                TextView empty = new TextView(this);
+                empty.setText(Strings.noBlockedSites);
+                empty.setTextColor(cDim);
+                empty.setGravity(Gravity.CENTER);
+                empty.setPadding(0, dp(30), 0, dp(30));
+                list.addView(empty);
+            } else {
+                for (final String site : new ArrayList<>(blockedSites)) {
+                    addRuleRow(list, site, () -> {
+                        blockedSites.remove(site);
+                        save();
+                        showBlockedSites();
+                    });
+                }
+            }
+
+            sv.addView(list);
+            d.addView(sv);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showMarks() {
+        try {
+            LinearLayout d = dialogBase(Strings.bookmarks, IC_STAR);
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(350)));
+            LinearLayout list = new LinearLayout(this);
+            list.setOrientation(LinearLayout.VERTICAL);
+            
+            if (marks.isEmpty()) {
+                TextView e = new TextView(this);
+                e.setText(Strings.noBookmarks);
+                e.setTextColor(cDim);
+                e.setGravity(Gravity.CENTER);
+                e.setPadding(0, dp(60), 0, dp(60));
+                list.addView(e);
+            } else {
+                for (final String u : new ArrayList<>(marks)) {
+                    addUrlRow(list, getDomain(u), u, () -> { closeDialog(); go(u); },
+                        () -> { marks.remove(u); save(); showMarks(); });
+                }
+            }
+            sv.addView(list);
+            d.addView(sv);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showHist() {
+        try {
+            LinearLayout d = dialogBase(Strings.history, IC_CLOCK);
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(350)));
+            LinearLayout list = new LinearLayout(this);
+            list.setOrientation(LinearLayout.VERTICAL);
+            
+            if (hist.isEmpty()) {
+                TextView e = new TextView(this);
+                e.setText(Strings.noHistory);
+                e.setTextColor(cDim);
+                e.setGravity(Gravity.CENTER);
+                e.setPadding(0, dp(60), 0, dp(60));
+                list.addView(e);
+            } else {
+                int count = Math.min(hist.size(), 50);
+                for (int i = 0; i < count; i++) {
+                    final HistoryItem h = hist.get(i);
+                    String title = (h.title != null && !h.title.isEmpty()) ? h.title : getDomain(h.url);
+                    addUrlRow(list, title, getDomain(h.url),
+                        () -> { closeDialog(); go(h.url); }, null);
+                }
+            }
+            sv.addView(list);
+            d.addView(sv);
+            
+            TextView clr = makeButton(Strings.clearHistory, 0xFFEF4444, 0x20EF4444);
+            clr.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(-1, -2);
+            cp.setMargins(0, dp(12), 0, 0);
+            clr.setLayoutParams(cp);
+            clr.setOnClickListener(v -> { hist.clear(); save(); closeDialog(); toast(Strings.historyCleared); });
+            d.addView(clr);
+            
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showPasswords() {
+        try {
+            LinearLayout d = dialogBase(Strings.passwords, IC_KEY);
+            
+            addToggle(d, IC_SAVE, Strings.savePasswords, savePasswords, b -> { savePasswords = b; save(); });
+            addDivider(d);
+            
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(260)));
+            LinearLayout list = new LinearLayout(this);
+            list.setOrientation(LinearLayout.VERTICAL);
+            
+            if (passwords.isEmpty()) {
+                TextView e = new TextView(this);
+                e.setText(Strings.noSavedPasswords);
+                e.setTextColor(cDim);
+                e.setGravity(Gravity.CENTER);
+                e.setPadding(0, dp(40), 0, dp(40));
+                list.addView(e);
+            } else {
+                for (final SavedPassword sp : passwords.values()) {
+                    addPasswordRow(list, sp);
+                }
+            }
+            sv.addView(list);
+            d.addView(sv);
+            
+            if (!passwords.isEmpty()) {
+                TextView clear = makeButton(Strings.deleteAllPasswords, 0xFFEF4444, 0x20EF4444);
+                clear.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(-1, -2);
+                cp.setMargins(0, dp(12), 0, 0);
+                clear.setLayoutParams(cp);
+                clear.setOnClickListener(v -> { passwords.clear(); save(); closeDialog(); toast(Strings.allPasswordsDeleted); });
+                d.addView(clear);
+            }
+            
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void addPasswordRow(LinearLayout parent, final SavedPassword sp) {
+        try {
+            if (sp == null) return;
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setBackgroundDrawable(ripple(roundRect(cLight, 12)));
+            row.setPadding(dp(14), dp(14), dp(14), dp(14));
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+            rp.setMargins(0, dp(4), 0, 0);
+            row.setLayoutParams(rp);
+            
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(24), dp(24)));
+            ic.setImageDrawable(icon(IC_KEY, cPrimary));
+            
+            LinearLayout info = new LinearLayout(this);
+            info.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams ip = new LinearLayout.LayoutParams(0, -2, 1f);
+            ip.setMargins(dp(12), 0, dp(8), 0);
+            info.setLayoutParams(ip);
+            
+            TextView dom = new TextView(this);
+            dom.setText(sp.domain != null ? sp.domain : "");
+            dom.setTextColor(cText);
+            dom.setTextSize(14);
+            dom.setTypeface(null, Typeface.BOLD);
+            dom.setSingleLine();
+            
+            TextView usr = new TextView(this);
+            usr.setText(sp.username != null ? sp.username : "");
+            usr.setTextColor(cDim);
+            usr.setTextSize(12);
+            usr.setSingleLine();
+            
+            info.addView(dom);
+            info.addView(usr);
+            
+            ImageView copy = new ImageView(this);
+            copy.setLayoutParams(new LinearLayout.LayoutParams(dp(24), dp(24)));
+            copy.setImageDrawable(icon(IC_COPY, cDim));
+            copy.setBackgroundDrawable(ripple(circle(0x20FFFFFF)));
+            copy.setOnClickListener(v -> { 
+                try { 
+                    if (clipboard != null && sp.password != null) {
+                        clipboard.setPrimaryClip(ClipData.newPlainText("pass", sp.password)); 
+                        toast(Strings.passwordCopied); 
+                    }
+                } catch (Exception e) {} 
+            });
+            
+            ImageView del = new ImageView(this);
+            LinearLayout.LayoutParams dlp = new LinearLayout.LayoutParams(dp(24), dp(24));
+            dlp.setMargins(dp(8), 0, 0, 0);
+            del.setLayoutParams(dlp);
+            del.setImageDrawable(icon(IC_TRASH, 0xFFEF4444));
+            del.setBackgroundDrawable(ripple(circle(0x20EF4444)));
+            del.setOnClickListener(v -> { 
+                if (sp.domain != null) {
+                    passwords.remove(sp.domain); 
+                    save(); 
+                    closeDialog(); 
+                    showPasswords(); 
+                    toast(Strings.passwordDeleted); 
+                }
+            });
+            
+            row.addView(ic);
+            row.addView(info);
+            row.addView(copy);
+            row.addView(del);
+            if (parent != null) parent.addView(row);
+        } catch (Exception e) {}
+    }
+
+    private void showSetMasterPassword() {
+        try {
+            LinearLayout d = dialogBase(Strings.masterPassword, IC_LOCK);
+            
+            TextView hint = new TextView(this);
+            hint.setText(Strings.masterPasswordHint);
+            hint.setTextColor(cDim);
+            hint.setTextSize(12);
+            hint.setPadding(0, 0, 0, dp(16));
+            d.addView(hint);
+            
+            final EditText input = new EditText(this);
+            input.setLayoutParams(lp(-1, dp(48)));
+            input.setBackgroundDrawable(roundRect(cLight, 10));
+            input.setPadding(dp(14), dp(10), dp(14), dp(10));
+            input.setTextColor(cText);
+            input.setHintTextColor(cDim);
+            input.setHint(Strings.enterMasterPassword);
+            input.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            d.addView(input);
+            
+            final EditText confirm = new EditText(this);
+            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(-1, dp(48));
+            cp.setMargins(0, dp(8), 0, 0);
+            confirm.setLayoutParams(cp);
+            confirm.setBackgroundDrawable(roundRect(cLight, 10));
+            confirm.setPadding(dp(14), dp(10), dp(14), dp(10));
+            confirm.setTextColor(cText);
+            confirm.setHintTextColor(cDim);
+            confirm.setHint(Strings.confirmPassword);
+            confirm.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            d.addView(confirm);
+            
+            LinearLayout btns = new LinearLayout(this);
+            btns.setOrientation(LinearLayout.HORIZONTAL);
+            btns.setGravity(Gravity.END);
+            LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(-1, -2);
+            bp.setMargins(0, dp(16), 0, 0);
+            btns.setLayoutParams(bp);
+            
+            TextView cancel = makeButton(Strings.cancel, cDim, cLight);
+            cancel.setOnClickListener(v -> closeDialog());
+            
+            TextView set = makeButton(Strings.save, Color.WHITE, cPrimary);
+            LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(-2, -2);
+            sp.setMargins(dp(10), 0, 0, 0);
+            set.setLayoutParams(sp);
+            set.setOnClickListener(v -> {
+                String pwd = input.getText().toString();
+                String conf = confirm.getText().toString();
+                if (pwd.length() < 4) { toast(Strings.passwordTooShort); return; }
+                if (!pwd.equals(conf)) { toast(Strings.passwordsDontMatch); return; }
+                masterPasswordHash = crypto.hashPassword(pwd);
+                masterPasswordEnabled = true;
+                crypto.initWithPassword(pwd);
+                save();
+                toast(Strings.masterPasswordSet);
+                closeDialog();
+            });
+            
+            btns.addView(cancel);
+            btns.addView(set);
+            d.addView(btns);
+            
+            if (masterPasswordEnabled) {
+                TextView remove = makeButton(Strings.removeMasterPassword, 0xFFEF4444, 0x20EF4444);
+                remove.setGravity(Gravity.CENTER);
+                LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+                rp.setMargins(0, dp(12), 0, 0);
+                remove.setLayoutParams(rp);
+                remove.setOnClickListener(v -> {
+                    masterPasswordEnabled = false;
+                    masterPasswordHash = "";
+                    crypto.initDefault();
+                    save();
+                    toast(Strings.masterPasswordRemoved);
+                    closeDialog();
+                });
+                d.addView(remove);
+            }
+            
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showMasterPasswordDialog(final boolean startup) {
+        try {
+            isLocked = true;
+            applyTheme();
+            
+            LinearLayout d = new LinearLayout(this);
+            d.setOrientation(LinearLayout.VERTICAL);
+            d.setBackgroundDrawable(roundRect(cCard, 20));
+            d.setPadding(dp(24), dp(30), dp(24), dp(24));
+            d.setGravity(Gravity.CENTER_HORIZONTAL);
+            
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(56), dp(56)));
+            ic.setImageDrawable(icon(IC_LOCK, cPrimary));
+            d.addView(ic);
+            
+            TextView title = new TextView(this);
+            title.setText(Strings.phoenixLocked);
+            title.setTextColor(cText);
+            title.setTextSize(22);
+            title.setTypeface(null, Typeface.BOLD);
+            title.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(-2, -2);
+            tp.setMargins(0, dp(16), 0, dp(8));
+            title.setLayoutParams(tp);
+            d.addView(title);
+            
+            TextView hint = new TextView(this);
+            hint.setText(Strings.enterMasterPassword);
+            hint.setTextColor(cDim);
+            hint.setTextSize(14);
+            hint.setGravity(Gravity.CENTER);
+            d.addView(hint);
+            
+            final EditText input = new EditText(this);
+            LinearLayout.LayoutParams ip = new LinearLayout.LayoutParams(-1, dp(50));
+            ip.setMargins(0, dp(20), 0, 0);
+            input.setLayoutParams(ip);
+            input.setBackgroundDrawable(roundRect(cLight, 12));
+            input.setPadding(dp(16), dp(12), dp(16), dp(12));
+            input.setTextColor(cText);
+            input.setHintTextColor(cDim);
+            input.setHint(Strings.password);
+            input.setGravity(Gravity.CENTER);
+            input.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            d.addView(input);
+            
+            TextView unlock = new TextView(this);
+            unlock.setText(Strings.unlock);
+            unlock.setTextColor(Color.WHITE);
+            unlock.setTextSize(16);
+            unlock.setTypeface(null, Typeface.BOLD);
+            unlock.setGravity(Gravity.CENTER);
+            unlock.setBackgroundDrawable(ripple(roundRect(cPrimary, 12)));
+            LinearLayout.LayoutParams up = new LinearLayout.LayoutParams(-1, dp(50));
+            up.setMargins(0, dp(16), 0, 0);
+            unlock.setLayoutParams(up);
+            unlock.setOnClickListener(v -> {
+                String pwd = input.getText().toString();
+                if (crypto.verifyPassword(pwd, masterPasswordHash)) {
+                    crypto.initWithPassword(pwd);
+                    load();
+                    closeDialog();
+                    if (startup) initBrowser();
+                } else {
+                    toast(Strings.wrongPassword);
+                    input.setText("");
+                    vib();
+                }
+            });
+            d.addView(unlock);
+            
+            root = new FrameLayout(this);
+            root.setBackgroundColor(cBg);
+            setContentView(root);
+            
+            overlay = new FrameLayout(this);
+            overlay.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+            overlay.setBackgroundColor(cBg);
+            root.addView(overlay);
+            
+            dialog = new FrameLayout(this);
+            FrameLayout.LayoutParams dp = new FrameLayout.LayoutParams(-1, -2);
+            dp.gravity = Gravity.CENTER;
+            dp.setMargins(dp(24), 0, dp(24), 0);
+            dialog.setLayoutParams(dp);
+            dialog.addView(d);
+            root.addView(dialog);
+        } catch (Exception e) {
+            initBrowser();
+        }
+    }
+
+    private void showThemes() {
+        try {
+            LinearLayout d = dialogBase(Strings.themes, IC_PALETTE);
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(380)));
+            LinearLayout list = new LinearLayout(this);
+            list.setOrientation(LinearLayout.VERTICAL);
+            
+            for (int i = 0; i < themes.length; i++) {
+                final int idx = i;
+                LinearLayout row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setGravity(Gravity.CENTER_VERTICAL);
+                row.setBackgroundDrawable(ripple(roundRect(theme == i ? (cPrimary & 0x30FFFFFF) : cLight, 12)));
+                row.setPadding(dp(14), dp(14), dp(14), dp(14));
+                LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+                rp.setMargins(0, dp(4), 0, 0);
+                row.setLayoutParams(rp);
+                
+                LinearLayout preview = new LinearLayout(this);
+                preview.setLayoutParams(new LinearLayout.LayoutParams(dp(56), dp(28)));
+                preview.setBackgroundDrawable(roundRect(themes[i][0], 6));
+                preview.setPadding(dp(2), dp(2), dp(2), dp(2));
+                
+                View c1 = new View(this);
+                c1.setLayoutParams(new LinearLayout.LayoutParams(0, -1, 1f));
+                c1.setBackgroundDrawable(roundRect(themes[i][5], 4));
+                View c2 = new View(this);
+                LinearLayout.LayoutParams c2p = new LinearLayout.LayoutParams(0, -1, 1f);
+                c2p.setMargins(dp(2), 0, 0, 0);
+                c2.setLayoutParams(c2p);
+                c2.setBackgroundDrawable(roundRect(themes[i][6], 4));
+                preview.addView(c1);
+                preview.addView(c2);
+                
+                TextView name = new TextView(this);
+                name.setText(Strings.themeNames[i]);
+                name.setTextColor(cText);
+                name.setTextSize(15);
+                name.setPadding(dp(14), 0, 0, 0);
+                name.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
+                
+                ImageView check = new ImageView(this);
+                check.setLayoutParams(new LinearLayout.LayoutParams(dp(22), dp(22)));
+                check.setImageDrawable(icon(IC_CHECK, theme == i ? cPrimary : 0x00000000));
+                
+                row.addView(preview);
+                row.addView(name);
+                row.addView(check);
+                row.setOnClickListener(v -> { theme = idx; save(); closeDialog(); recreate(); });
+                list.addView(row);
+            }
+            
+            sv.addView(list);
+            d.addView(sv);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showSettings() {
+        try {
+            LinearLayout d = dialogBase(Strings.settings, IC_GEAR);
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(400)));
+            LinearLayout content = new LinearLayout(this);
+            content.setOrientation(LinearLayout.VERTICAL);
+            
+            TextView zl = new TextView(this);
+            zl.setText(Strings.textSize + ": " + textSize + "%");
+            zl.setTextColor(cText);
+            zl.setTextSize(14);
+            content.addView(zl);
+            
+            SeekBar zs = new SeekBar(this);
+            zs.setMax(150);
+            zs.setProgress(textSize - 50);
+            zs.setPadding(0, dp(8), 0, dp(16));
+            zs.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                public void onProgressChanged(SeekBar s, int p, boolean u) {
+                    textSize = p + 50;
+                    zl.setText(Strings.textSize + ": " + textSize + "%");
+                    for (Tab t : tabs) {
+                        if (t.wv != null) {
+                            try { t.wv.getSettings().setTextZoom(textSize); } catch (Exception e) {}
+                        }
+                    }
+                }
+                public void onStartTrackingTouch(SeekBar s) {}
+                public void onStopTrackingTouch(SeekBar s) { save(); }
+            });
+            content.addView(zs);
+            
+            addAction(content, IC_SEARCH, Strings.searchEngine + ": " + searchEngine, () -> { closeDialog(); showSearchEngines(); });
+            
+            addToggle(content, IC_CODE, Strings.javascript, enableJS, b -> { 
+                enableJS = b; 
+                for (Tab t : tabs) {
+                    if (t.wv != null) {
+                        try { t.wv.getSettings().setJavaScriptEnabled(b); } catch (Exception e) {}
+                    }
+                }
+                save(); 
+            });
+            addToggle(content, IC_IMAGE, Strings.loadImages, enableImages, b -> { 
+                enableImages = b; 
+                for (Tab t : tabs) {
+                    if (t.wv != null) {
+                        try { t.wv.getSettings().setLoadsImagesAutomatically(b); } catch (Exception e) {}
+                    }
+                }
+                save(); 
+            });
+            addToggle(content, IC_TEXT, Strings.textOnlyMode, textOnlyMode, b -> { textOnlyMode = b; save(); });
+            addToggle(content, IC_ZAP, Strings.turboMode, turboMode, b -> { turboMode = b; save(); });
+            addToggle(content, IC_FORWARD, Strings.swipeNavigation, swipeNavigation, b -> { swipeNavigation = b; save(); });
+            addToggle(content, IC_SAVE, Strings.savePasswords, savePasswords, b -> { savePasswords = b; save(); });
+            addToggle(content, IC_GLOBE, Strings.openLinksInApps, openLinksInApps, b -> { openLinksInApps = b; save(); });
+            addToggle(content, IC_WARNING, Strings.confirmExit, confirmExit, b -> { confirmExit = b; save(); });
+            addToggle(content, IC_SEARCH, Strings.autoSuggestions, autoSuggest, b -> { autoSuggest = b; save(); });
+            
+            addDivider(content);
+            
+            addAction(content, IC_USER, Strings.customUserAgent, () -> { closeDialog(); showUserAgentDialog(); });
+            addAction(content, IC_TRASH, Strings.clearCache, () -> { 
+                for (Tab t : tabs) {
+                    if (t.wv != null) {
+                        try { t.wv.clearCache(true); } catch (Exception e) {}
+                    }
+                }
+                toast(Strings.cacheCleared); 
+            });
+            addAction(content, IC_CLOSE, Strings.clearCookies, () -> { 
+                try { CookieManager.getInstance().removeAllCookies(null); } catch (Exception e) {}
+                toast(Strings.cookiesCleared); 
+            });
+            addAction(content, IC_TRASH, Strings.clearAllData, () -> {
+                hist.clear(); 
+                passwords.clear();
+                for (Tab t : tabs) {
+                    if (t.wv != null) {
+                        try { 
+                            t.wv.clearCache(true); 
+                            t.wv.clearHistory(); 
+                        } catch (Exception e) {}
+                    }
+                }
+                try {
+                    CookieManager.getInstance().removeAllCookies(null);
+                    WebStorage.getInstance().deleteAllData();
+                } catch (Exception e) {}
+                save(); 
+                toast(Strings.allDataCleared); 
+                closeDialog();
+            });
+            
+            sv.addView(content);
+            d.addView(sv);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showSearchEngines() {
+        try {
+            LinearLayout d = dialogBase(Strings.searchEngine, IC_SEARCH);
+            String[][] engines = {
+                {"google", "Google"}, 
+                {"duckduckgo", "DuckDuckGo"}, 
+                {"bing", "Bing"}, 
+                {"yahoo", "Yahoo"}, 
+                {"yandex", "Yandex"}, 
+                {"ecosia", "Ecosia"}, 
+                {"startpage", "StartPage"}
+            };
+            
+            for (String[] eng : engines) {
+                final String id = eng[0];
+                final String name = eng[1];
+                LinearLayout row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setGravity(Gravity.CENTER_VERTICAL);
+                row.setBackgroundDrawable(ripple(roundRect(searchEngine.equals(id) ? (cPrimary & 0x30FFFFFF) : cLight, 12)));
+                row.setPadding(dp(14), dp(14), dp(14), dp(14));
+                LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+                rp.setMargins(0, dp(4), 0, 0);
+                row.setLayoutParams(rp);
+                
+                TextView nameText = new TextView(this);
+                nameText.setText(name);
+                nameText.setTextColor(cText);
+                nameText.setTextSize(15);
+                nameText.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
+                
+                ImageView check = new ImageView(this);
+                check.setLayoutParams(new LinearLayout.LayoutParams(dp(22), dp(22)));
+                check.setImageDrawable(icon(IC_CHECK, searchEngine.equals(id) ? cPrimary : 0x00000000));
+                
+                row.addView(nameText);
+                row.addView(check);
+                row.setOnClickListener(v -> { searchEngine = id; save(); closeDialog(); toast(Strings.searchEngine + ": " + name); });
+                d.addView(row);
+            }
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showUserAgentDialog() {
+        try {
+            LinearLayout d = dialogBase(Strings.customUserAgent, IC_USER);
+            
+            TextView hint = new TextView(this);
+            hint.setText(Strings.userAgentHint);
+            hint.setTextColor(cDim);
+            hint.setTextSize(12);
+            hint.setPadding(0, 0, 0, dp(12));
+            d.addView(hint);
+            
+            final EditText input = new EditText(this);
+            input.setLayoutParams(lp(-1, dp(80)));
+            input.setBackgroundDrawable(roundRect(cLight, 10));
+            input.setPadding(dp(14), dp(10), dp(14), dp(10));
+            input.setTextColor(cText);
+            input.setHintTextColor(cDim);
+            input.setHint("Mozilla/5.0...");
+            input.setText(customUserAgent != null ? customUserAgent : "");
+            input.setGravity(Gravity.TOP);
+            d.addView(input);
+            
+            LinearLayout btns = new LinearLayout(this);
+            btns.setOrientation(LinearLayout.HORIZONTAL);
+            btns.setGravity(Gravity.END);
+            LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(-1, -2);
+            bp.setMargins(0, dp(16), 0, 0);
+            btns.setLayoutParams(bp);
+            
+            TextView reset = makeButton(Strings.reset, cDim, cLight);
+            reset.setOnClickListener(v -> { input.setText(""); });
+            
+            TextView sv = makeButton(Strings.save, Color.WHITE, cPrimary);
+            LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(-2, -2);
+            sp.setMargins(dp(10), 0, 0, 0);
+            sv.setLayoutParams(sp);
+            sv.setOnClickListener(v -> {
+                customUserAgent = input.getText().toString().trim();
+                save();
+                toast(Strings.userAgentSaved);
+                closeDialog();
+            });
+            
+            btns.addView(reset);
+            btns.addView(sv);
+            d.addView(btns);
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showStatistics() {
+        try {
+            LinearLayout d = dialogBase(Strings.statistics, IC_STATS);
+
+            long currentSession = (System.currentTimeMillis() - sessionStartTime) / 1000;
+            long totalTime = browsingTime + currentSession;
+
+            ScrollView sv = new ScrollView(this);
+            sv.setLayoutParams(lp(-1, dp(350)));
+            LinearLayout content = new LinearLayout(this);
+            content.setOrientation(LinearLayout.VERTICAL);
+
+            addStatRow(content, Strings.adsBlocked, formatNumber(adsBlocked), IC_SHIELD_CHECK, 0xFF10B981);
+            addStatRow(content, Strings.trackersBlocked, formatNumber(trackersBlocked), IC_EYE_OFF, 0xFF8B5CF6);
+            addStatRow(content, Strings.dataSaved, formatBytes(dataSaved), IC_ZAP, 0xFF06B6D4);
+            addStatRow(content, Strings.pagesLoaded, formatNumber(pagesLoaded), IC_GLOBE, 0xFF3B82F6);
+            addStatRow(content, Strings.browsingTime, formatTime(totalTime), IC_CLOCK, 0xFFF59E0B);
+            addStatRow(content, Strings.thisSession, formatTime(currentSession), IC_ZAP, 0xFF10B981);
+            addStatRow(content, Strings.tabsOpened, String.valueOf(tabs.size()), IC_LAYERS, 0xFFEC4899);
+            addStatRow(content, Strings.bookmarks, String.valueOf(marks.size()), IC_STAR, 0xFFEAB308);
+            addStatRow(content, Strings.savedPasswords, String.valueOf(passwords.size()), IC_KEY, 0xFF6366F1);
+
+            sv.addView(content);
+            d.addView(sv);
+
+            TextView reset = makeButton(Strings.resetAllStats, 0xFFEF4444, 0x20EF4444);
+            reset.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+            rp.setMargins(0, dp(12), 0, 0);
+            reset.setLayoutParams(rp);
+            reset.setOnClickListener(v -> {
+                adsBlocked = 0; trackersBlocked = 0; dataSaved = 0; pagesLoaded = 0; browsingTime = 0;
+                save(); toast(Strings.statsReset); closeDialog();
+            });
+            d.addView(reset);
+
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void addStatRow(LinearLayout parent, String label, String value, int iconType, int color) {
+        try {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setBackgroundDrawable(roundRect(cLight, 10));
+            row.setPadding(dp(14), dp(14), dp(14), dp(14));
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+            rp.setMargins(0, dp(4), 0, 0);
+            row.setLayoutParams(rp);
+
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(22), dp(22)));
+            ic.setImageDrawable(icon(iconType, color));
+
+            TextView lab = new TextView(this);
+            lab.setText(label != null ? label : "");
+            lab.setTextColor(cText);
+            lab.setTextSize(14);
+            LinearLayout.LayoutParams lpp = new LinearLayout.LayoutParams(0, -2, 1f);
+            lpp.setMargins(dp(12), 0, 0, 0);
+            lab.setLayoutParams(lpp);
+
+            TextView val = new TextView(this);
+            val.setText(value != null ? value : "0");
+            val.setTextColor(color);
+            val.setTextSize(14);
+            val.setTypeface(null, Typeface.BOLD);
+
+            row.addView(ic);
+            row.addView(lab);
+            row.addView(val);
+            if (parent != null) parent.addView(row);
+        } catch (Exception e) {}
+    }
+
+    private void showDownloads() {
+        try {
+            LinearLayout d = dialogBase(Strings.downloads, IC_DOWNLOAD);
+
+            TextView hint = new TextView(this);
+            hint.setText(Strings.downloadsHint);
+            hint.setTextColor(cDim);
+            hint.setTextSize(12);
+            hint.setPadding(0, 0, 0, dp(12));
+            d.addView(hint);
+
+            TextView openFolder = makeButton(Strings.openDownloadsFolder, cPrimary, cLight);
+            openFolder.setGravity(Gravity.CENTER);
+            openFolder.setOnClickListener(v -> {
+                try {
+                    Intent intent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DOWNLOADS).getPath()), "resource/folder");
+                        startActivity(intent);
+                    } catch (Exception ex) {
+                        toast(Strings.cannotOpenFolder);
+                    }
+                }
+            });
+            d.addView(openFolder);
+
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showUrlOptions() {
+        try {
+            Tab t = tab(); 
+            if (t == null || t.home) return;
+            LinearLayout d = dialogBase(Strings.urlOptions, IC_LINK);
+            addAction(d, IC_COPY, Strings.copyUrl, () -> { 
+                try { 
+                    if (clipboard != null && t.url != null) {
+                        clipboard.setPrimaryClip(ClipData.newPlainText("URL", t.url)); 
+                        toast(Strings.urlCopied); 
+                    }
+                } catch (Exception e) {} 
+                closeDialog(); 
+            });
+            addAction(d, IC_SHARE, Strings.sharePage, () -> { sharePage(t.url, t.title); closeDialog(); });
+            addAction(d, IC_PLUS, Strings.openInNewTab, () -> { newTab(t.url, t.title); closeDialog(); });
+            addAction(d, IC_REFRESH, Strings.refresh, () -> { refresh(); closeDialog(); });
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private void showQuickLinkOptions(String name, String url) {
+        try {
+            LinearLayout d = dialogBase(name != null ? name : "", IC_GLOBE);
+            addAction(d, IC_GLOBE, Strings.open, () -> { closeDialog(); go(url); });
+            addAction(d, IC_PLUS, Strings.openInNewTab, () -> { closeDialog(); newTab(url, name); });
+            addAction(d, IC_COPY, Strings.copyUrl, () -> { 
+                try { 
+                    if (clipboard != null && url != null) {
+                        clipboard.setPrimaryClip(ClipData.newPlainText("URL", url)); 
+                        toast(Strings.urlCopied); 
+                    }
+                } catch (Exception e) {} 
+                closeDialog(); 
+            });
+            openDialog(d);
+        } catch (Exception e) {}
+    }
+
+    private String getDomain(String url) {
+        if (url == null) return "";
+        try { return new URL(url).getHost(); }
+        catch (Exception e) { return url; }
+    }
+
+    private String formatNumber(long num) {
+        if (num < 1000) return String.valueOf(num);
+        if (num < 1000000) return String.format("%.1fK", num / 1000.0);
+        return String.format("%.1fM", num / 1000000.0);
+    }
+
+    private String formatBytes(long bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return String.format("%.1f KB", bytes / 1024.0);
+        if (bytes < 1024 * 1024 * 1024) return String.format("%.1f MB", bytes / (1024.0 * 1024));
+        return String.format("%.1f GB", bytes / (1024.0 * 1024 * 1024));
+    }
+
+    private String formatTime(long seconds) {
+        if (seconds < 60) return seconds + "s";
+        if (seconds < 3600) return (seconds / 60) + "m " + (seconds % 60) + "s";
+        return (seconds / 3600) + "h " + ((seconds % 3600) / 60) + "m";
+    }
+
+    // ========== UI HELPERS ==========
+
+    private void addToggle(LinearLayout p, int iconType, String title, boolean init, final Tog cb) {
+        try {
+            final LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setBackgroundDrawable(ripple(roundRect(cLight, 12)));
+            row.setPadding(dp(14), dp(14), dp(14), dp(14));
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+            rp.setMargins(0, dp(4), 0, 0);
+            row.setLayoutParams(rp);
+            
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(20), dp(20)));
+            ic.setImageDrawable(icon(iconType, cDim));
+            
+            TextView t = new TextView(this);
+            t.setText(title != null ? title : "");
+            t.setTextColor(cText);
+            t.setTextSize(14);
+            LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(0, -2, 1f);
+            tp.setMargins(dp(12), 0, 0, 0);
+            t.setLayoutParams(tp);
+            
+            final View sw = makeSwitch(init);
+            row.addView(ic);
+            row.addView(t);
+            row.addView(sw);
+            row.setOnClickListener(v -> { 
+                vib(); 
+                boolean n = !((Boolean) sw.getTag()); 
+                animSwitch(sw, n); 
+                if (cb != null) cb.t(n); 
+            });
+            if (p != null) p.addView(row);
+        } catch (Exception e) {}
+    }
+
+    private void addAction(LinearLayout p, int iconType, String title, final Runnable action) {
+        try {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setBackgroundDrawable(ripple(roundRect(cLight, 12)));
+            row.setPadding(dp(14), dp(14), dp(14), dp(14));
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+            rp.setMargins(0, dp(4), 0, 0);
+            row.setLayoutParams(rp);
+            
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(20), dp(20)));
+            ic.setImageDrawable(icon(iconType, cDim));
+            
+            TextView t = new TextView(this);
+            t.setText(title != null ? title : "");
+            t.setTextColor(cText);
+            t.setTextSize(14);
+            LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(0, -2, 1f);
+            tp.setMargins(dp(12), 0, 0, 0);
+            t.setLayoutParams(tp);
+            
+            ImageView arr = new ImageView(this);
+            arr.setLayoutParams(new LinearLayout.LayoutParams(dp(16), dp(16)));
+            arr.setImageDrawable(icon(IC_FORWARD, cDim));
+            
+            row.addView(ic);
+            row.addView(t);
+            row.addView(arr);
+            row.setOnClickListener(v -> { click(v); if (action != null) action.run(); });
+            if (p != null) p.addView(row);
+        } catch (Exception e) {}
+    }
+
+    private void addDivider(LinearLayout p) {
+        try {
+            View div = new View(this);
+            div.setBackgroundColor(cLight);
+            LinearLayout.LayoutParams dp = new LinearLayout.LayoutParams(-1, dp(1));
+            dp.setMargins(0, dp(12), 0, dp(12));
+            div.setLayoutParams(dp);
+            if (p != null) p.addView(div);
+        } catch (Exception e) {}
+    }
+
+    private void addUrlRow(LinearLayout p, String title, String sub, final Runnable click, final Runnable del) {
+        try {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setBackgroundDrawable(ripple(roundRect(cLight, 10)));
+            row.setPadding(dp(12), dp(12), dp(12), dp(12));
+            LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(-1, -2);
+            rp.setMargins(0, dp(4), 0, 0);
+            row.setLayoutParams(rp);
+            
+            ImageView ic = new ImageView(this);
+            ic.setLayoutParams(new LinearLayout.LayoutParams(dp(20), dp(20)));
+            ic.setImageDrawable(icon(IC_GLOBE, cDim));
+            
+            LinearLayout texts = new LinearLayout(this);
+            texts.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams txtp = new LinearLayout.LayoutParams(0, -2, 1f);
+            txtp.setMargins(dp(12), 0, dp(8), 0);
+            texts.setLayoutParams(txtp);
+            
+            TextView t = new TextView(this);
+            t.setText(title != null ? title : "");
+            t.setTextColor(cText);
+            t.setTextSize(13);
+            t.setSingleLine();
+            t.setEllipsize(TextUtils.TruncateAt.END);
+            
+            TextView s = new TextView(this);
+            s.setText(sub != null ? sub : "");
+            s.setTextColor(cDim);
+            s.setTextSize(11);
+            s.setSingleLine();
+            
+            texts.addView(t);
+            texts.addView(s);
+            row.addView(ic);
+            row.addView(texts);
+            
+            if (del != null) {
+                ImageView x = new ImageView(this);
+                x.setLayoutParams(new LinearLayout.LayoutParams(dp(20), dp(20)));
+                x.setImageDrawable(icon(IC_TRASH, 0xFFEF4444));
+                x.setBackgroundDrawable(ripple(circle(0x20EF4444)));
+                x.setOnClickListener(v -> { click(v); del.run(); });
+                row.addView(x);
+            }
+            row.setOnClickListener(v -> { click(v); if (click != null) click.run(); });
+            if (p != null) p.addView(row);
+        } catch (Exception e) {}
+    }
+
+    private TextView makeButton(String text, int textColor, int bgColor) {
+        TextView btn = new TextView(this);
+        btn.setText(text != null ? text : "");
+        btn.setTextColor(textColor);
+        btn.setBackgroundDrawable(ripple(roundRect(bgColor, 8)));
+        btn.setPadding(dp(20), dp(12), dp(20), dp(12));
+        return btn;
+    }
+
+    private View makeSwitch(boolean on) {
+        FrameLayout sw = new FrameLayout(this);
+        sw.setLayoutParams(new LinearLayout.LayoutParams(dp(48), dp(26)));
+        sw.setTag(Boolean.valueOf(on));
+        View bg = new View(this);
+        bg.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+        bg.setBackgroundDrawable(roundRect(on ? cPrimary : 0x40FFFFFF, 13));
+        bg.setTag("bg");
+        View thumb = new View(this);
+        FrameLayout.LayoutParams tp = new FrameLayout.LayoutParams(dp(22), dp(22));
+        tp.gravity = Gravity.CENTER_VERTICAL;
+        tp.setMargins(on ? dp(24) : dp(2), 0, 0, 0);
+        thumb.setLayoutParams(tp);
+        thumb.setBackgroundDrawable(circle(Color.WHITE));
+        thumb.setTag("th");
+        sw.addView(bg);
+        sw.addView(thumb);
+        return sw;
+    }
+
+    private void animSwitch(View sw, boolean on) {
+        try {
+            sw.setTag(Boolean.valueOf(on));
+            View bg = sw.findViewWithTag("bg");
+            final View th = sw.findViewWithTag("th");
+            if (bg != null) bg.setBackgroundDrawable(roundRect(on ? cPrimary : 0x40FFFFFF, 13));
+            if (th != null) {
+                final FrameLayout.LayoutParams p = (FrameLayout.LayoutParams) th.getLayoutParams();
+                ValueAnimator a = ValueAnimator.ofInt(p.leftMargin, on ? dp(24) : dp(2));
+                a.setDuration(180);
+                a.addUpdateListener(an -> { p.leftMargin = (int) an.getAnimatedValue(); th.setLayoutParams(p); });
+                a.start();
+            }
+        } catch (Exception e) {}
+    }
+
+    private ImageView navBtn(final int ic, final Runnable action) {
+        ImageView b = new ImageView(this);
+        LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(dp(38), dp(38));
+        bp.setMargins(dp(2), 0, dp(2), 0);
+        b.setLayoutParams(bp);
+        b.setImageDrawable(icon(ic, cText));
+        b.setPadding(dp(9), dp(9), dp(9), dp(9));
+        b.setBackgroundDrawable(ripple(circle(0x20FFFFFF)));
+        b.setOnClickListener(v -> { click(v); if (action != null) action.run(); });
+        return b;
+    }
+
+    private void click(View v) { 
+        try { 
+            vib(); 
+            if (v != null) {
+                v.animate().scaleX(0.92f).scaleY(0.92f).setDuration(60).withEndAction(() -> 
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(60).start()
+                ).start(); 
+            }
+        } catch (Exception e) {} 
+    }
+    
+    private void vib() { try { if (vib != null) vib.vibrate(10); } catch (Exception e) {} }
+    private void toast(String m) { try { if (m != null) Toast.makeText(this, m, Toast.LENGTH_SHORT).show(); } catch (Exception e) {} }
+    private void hideKb() { try { if (urlInput != null) ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(urlInput.getWindowToken(), 0); } catch (Exception e) {} }
+    private void showKb(View v) { try { if (v != null) ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(v, InputMethodManager.SHOW_IMPLICIT); } catch (Exception e) {} }
+    private int dp(float v) { try { return (int) (v * getResources().getDisplayMetrics().density); } catch (Exception e) { return (int) v; } }
+    private LinearLayout.LayoutParams lp(int w, int h) { return new LinearLayout.LayoutParams(w, h); }
+    private FrameLayout.LayoutParams flp(int w, int h, int g, int l, int t, int r, int b) { FrameLayout.LayoutParams p = new FrameLayout.LayoutParams(w, h); p.gravity = g; p.setMargins(l, t, r, b); return p; }
+
+    private Drawable roundRect(int c, int r) { GradientDrawable d = new GradientDrawable(); d.setColor(c); d.setCornerRadius(dp(r)); return d; }
+    private Drawable circle(int c) { GradientDrawable d = new GradientDrawable(); d.setColor(c); d.setShape(GradientDrawable.OVAL); return d; }
+    private Drawable ripple(Drawable bg) { return new RippleDrawable(ColorStateList.valueOf(0x30FFFFFF), bg, bg == null ? new ColorDrawable(0xFFFFFFFF) : null); }
+
+    // ========== ICONS ==========
+
+    private Drawable icon(final int type, final int color) {
+        return new Drawable() {
+            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+            public void draw(Canvas c) { try { p.setColor(color); p.setStrokeWidth(dp(1.6f)); p.setStrokeCap(Paint.Cap.ROUND); p.setStrokeJoin(Paint.Join.ROUND); int w = getBounds().width(), h = getBounds().height(); switch (type) { case IC_BACK: drawArrow(c,w,h,true); break; case IC_FORWARD: drawArrow(c,w,h,false); break; case IC_REFRESH: drawRefresh(c,w,h); break; case IC_HOME: drawHome(c,w,h); break; case IC_SHIELD: case IC_SHIELD_CHECK: drawShield(c,w,h,type==IC_SHIELD_CHECK); break; case IC_MENU: drawMenu(c,w,h); break; case IC_PLUS: drawPlus(c,w,h); break; case IC_BOOKMARK: case IC_BOOKMARK_FILL: drawBookmark(c,w,h,type==IC_BOOKMARK_FILL); break; case IC_CLOCK: drawClock(c,w,h); break; case IC_PALETTE: drawPalette(c,w,h); break; case IC_GEAR: drawGear(c,w,h); break; case IC_SEARCH: drawSearch(c,w,h); break; case IC_CLOSE: drawClose(c,w,h); break; case IC_CHECK: drawCheck(c,w,h); break; case IC_GLOBE: drawGlobe(c,w,h); break; case IC_UNLOCK: case IC_LOCK: drawLock(c,w,h,type==IC_LOCK); break; case IC_KEY: drawKey(c,w,h); break; case IC_ARROW_UP: drawVertArrow(c,w,h,true); break; case IC_ARROW_DOWN: drawVertArrow(c,w,h,false); break; case IC_COPY: drawCopy(c,w,h); break; case IC_SHARE: drawShare(c,w,h); break; case IC_DOWNLOAD: drawDownload(c,w,h); break; case IC_CODE: drawCode(c,w,h); break; case IC_TEXT: drawText(c,w,h); break; case IC_IMAGE: drawImage(c,w,h); break; case IC_VIDEO: drawVideo(c,w,h); break; case IC_STAR: drawStar(c,w,h); break; case IC_TRASH: drawTrash(c,w,h); break; case IC_SAVE: drawSave(c,w,h); break; case IC_LINK: drawLink(c,w,h); break; case IC_EYE: case IC_EYE_OFF: drawEye(c,w,h,type==IC_EYE); break; case IC_MOON: drawMoon(c,w,h); break; case IC_ZAP: drawZap(c,w,h); break; case IC_FILTER: drawFilter(c,w,h); break; case IC_LAYERS: drawLayers(c,w,h); break; case IC_STATS: drawStats(c,w,h); break; case IC_USER: drawUser(c,w,h); break; case IC_WARNING: drawWarning(c,w,h); break; case IC_BLOCK: drawBlock(c,w,h); break; case IC_MIC: drawMic(c,w,h); break; case IC_PRINT: drawPrint(c,w,h); break; case IC_CAMERA: drawCamera(c,w,h); break; case IC_TRANSLATE: drawTranslate(c,w,h); break; } } catch (Exception e) {} }
+            void drawArrow(Canvas c,int w,int h,boolean l){p.setStyle(Paint.Style.STROKE);Path pa=new Path();if(l){pa.moveTo(w*.6f,h*.25f);pa.lineTo(w*.35f,h*.5f);pa.lineTo(w*.6f,h*.75f);}else{pa.moveTo(w*.4f,h*.25f);pa.lineTo(w*.65f,h*.5f);pa.lineTo(w*.4f,h*.75f);}c.drawPath(pa,p);}
+            void drawVertArrow(Canvas c,int w,int h,boolean up){p.setStyle(Paint.Style.STROKE);Path pa=new Path();if(up){pa.moveTo(w*.25f,h*.6f);pa.lineTo(w*.5f,h*.35f);pa.lineTo(w*.75f,h*.6f);}else{pa.moveTo(w*.25f,h*.4f);pa.lineTo(w*.5f,h*.65f);pa.lineTo(w*.75f,h*.4f);}c.drawPath(pa,p);}
+            void drawRefresh(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawArc(new RectF(w*.25f,h*.25f,w*.75f,h*.75f),-60,300,false,p);Path a=new Path();a.moveTo(w*.65f,h*.18f);a.lineTo(w*.72f,h*.32f);a.lineTo(w*.55f,h*.32f);p.setStyle(Paint.Style.FILL);c.drawPath(a,p);}
+            void drawHome(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);Path pa=new Path();pa.moveTo(w*.2f,h*.5f);pa.lineTo(w*.5f,h*.2f);pa.lineTo(w*.8f,h*.5f);c.drawPath(pa,p);c.drawRect(w*.3f,h*.5f,w*.7f,h*.8f,p);}
+            void drawShield(Canvas c,int w,int h,boolean check){p.setStyle(Paint.Style.STROKE);Path s=new Path();s.moveTo(w*.5f,h*.12f);s.lineTo(w*.82f,h*.25f);s.lineTo(w*.82f,h*.5f);s.quadTo(w*.82f,h*.85f,w*.5f,h*.92f);s.quadTo(w*.18f,h*.85f,w*.18f,h*.5f);s.lineTo(w*.18f,h*.25f);s.close();c.drawPath(s,p);if(check){Path ch=new Path();ch.moveTo(w*.32f,h*.52f);ch.lineTo(w*.45f,h*.65f);ch.lineTo(w*.68f,h*.38f);c.drawPath(ch,p);}}
+            void drawMenu(Canvas c,int w,int h){p.setStyle(Paint.Style.FILL);float r=dp(2.8f);c.drawCircle(w*.5f,h*.22f,r,p);c.drawCircle(w*.5f,h*.5f,r,p);c.drawCircle(w*.5f,h*.78f,r,p);}
+            void drawPlus(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawLine(w*.5f,h*.25f,w*.5f,h*.75f,p);c.drawLine(w*.25f,h*.5f,w*.75f,h*.5f,p);}
+            void drawBookmark(Canvas c,int w,int h,boolean f){p.setStyle(f?Paint.Style.FILL_AND_STROKE:Paint.Style.STROKE);Path b=new Path();b.moveTo(w*.22f,h*.12f);b.lineTo(w*.22f,h*.88f);b.lineTo(w*.5f,h*.7f);b.lineTo(w*.78f,h*.88f);b.lineTo(w*.78f,h*.12f);b.close();c.drawPath(b,p);}
+            void drawClock(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawCircle(w*.5f,h*.5f,w*.38f,p);c.drawLine(w*.5f,h*.28f,w*.5f,h*.5f,p);c.drawLine(w*.5f,h*.5f,w*.68f,h*.5f,p);}
+            void drawPalette(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawCircle(w*.5f,h*.5f,w*.38f,p);p.setStyle(Paint.Style.FILL);c.drawCircle(w*.35f,h*.38f,dp(3),p);c.drawCircle(w*.58f,h*.32f,dp(3),p);c.drawCircle(w*.68f,h*.52f,dp(3),p);c.drawCircle(w*.38f,h*.62f,dp(3),p);}
+            void drawGear(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawCircle(w*.5f,h*.5f,w*.16f,p);for(int i=0;i<8;i++){float a=(float)(i*Math.PI/4);c.drawLine(w*.5f+(float)Math.cos(a)*w*.24f,h*.5f+(float)Math.sin(a)*w*.24f,w*.5f+(float)Math.cos(a)*w*.38f,h*.5f+(float)Math.sin(a)*w*.38f,p);}}
+            void drawSearch(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawCircle(w*.42f,h*.42f,w*.26f,p);c.drawLine(w*.62f,h*.62f,w*.82f,h*.82f,p);}
+            void drawClose(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawLine(w*.28f,h*.28f,w*.72f,h*.72f,p);c.drawLine(w*.72f,h*.28f,w*.28f,h*.72f,p);}
+            void drawCheck(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(dp(2.2f));Path ch=new Path();ch.moveTo(w*.22f,h*.5f);ch.lineTo(w*.42f,h*.72f);ch.lineTo(w*.78f,h*.28f);c.drawPath(ch,p);}
+            void drawGlobe(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawCircle(w*.5f,h*.5f,w*.38f,p);c.drawOval(new RectF(w*.32f,h*.12f,w*.68f,h*.88f),p);c.drawLine(w*.12f,h*.5f,w*.88f,h*.5f,p);}
+            void drawLock(Canvas c,int w,int h,boolean locked){p.setStyle(Paint.Style.STROKE);c.drawRoundRect(new RectF(w*.25f,h*.45f,w*.75f,h*.85f),dp(4),dp(4),p);Path hook=new Path();hook.moveTo(w*.35f,h*.45f);hook.lineTo(w*.35f,h*.32f);hook.quadTo(w*.35f,h*.15f,w*.5f,h*.15f);if(locked){hook.quadTo(w*.65f,h*.15f,w*.65f,h*.32f);hook.lineTo(w*.65f,h*.45f);}else{hook.quadTo(w*.65f,h*.15f,w*.65f,h*.25f);}c.drawPath(hook,p);}
+            void drawKey(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawCircle(w*.35f,h*.35f,w*.2f,p);c.drawLine(w*.5f,h*.5f,w*.8f,h*.8f,p);c.drawLine(w*.65f,h*.65f,w*.75f,h*.55f,p);}
+            void drawCopy(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawRoundRect(new RectF(w*.3f,h*.18f,w*.72f,h*.68f),dp(3),dp(3),p);c.drawRoundRect(new RectF(w*.28f,h*.32f,w*.7f,h*.82f),dp(3),dp(3),p);}
+            void drawShare(Canvas c,int w,int h){p.setStyle(Paint.Style.FILL);c.drawCircle(w*.7f,h*.25f,dp(4),p);c.drawCircle(w*.3f,h*.5f,dp(4),p);c.drawCircle(w*.7f,h*.75f,dp(4),p);p.setStyle(Paint.Style.STROKE);c.drawLine(w*.35f,h*.45f,w*.65f,h*.28f,p);c.drawLine(w*.35f,h*.55f,w*.65f,h*.72f,p);}
+            void drawDownload(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawLine(w*.5f,h*.15f,w*.5f,h*.6f,p);Path a=new Path();a.moveTo(w*.3f,h*.45f);a.lineTo(w*.5f,h*.65f);a.lineTo(w*.7f,h*.45f);c.drawPath(a,p);c.drawLine(w*.2f,h*.8f,w*.8f,h*.8f,p);}
+            void drawCode(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);Path l=new Path();l.moveTo(w*.4f,h*.25f);l.lineTo(w*.2f,h*.5f);l.lineTo(w*.4f,h*.75f);c.drawPath(l,p);Path r=new Path();r.moveTo(w*.6f,h*.25f);r.lineTo(w*.8f,h*.5f);r.lineTo(w*.6f,h*.75f);c.drawPath(r,p);}
+            void drawText(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawLine(w*.2f,h*.25f,w*.8f,h*.25f,p);c.drawLine(w*.5f,h*.25f,w*.5f,h*.75f,p);c.drawLine(w*.35f,h*.75f,w*.65f,h*.75f,p);}
+            void drawImage(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawRoundRect(new RectF(w*.15f,h*.2f,w*.85f,h*.8f),dp(4),dp(4),p);p.setStyle(Paint.Style.FILL);c.drawCircle(w*.35f,h*.4f,dp(4),p);p.setStyle(Paint.Style.STROKE);Path m=new Path();m.moveTo(w*.2f,h*.7f);m.lineTo(w*.4f,h*.5f);m.lineTo(w*.55f,h*.6f);m.lineTo(w*.75f,h*.4f);m.lineTo(w*.85f,h*.55f);c.drawPath(m,p);}
+            void drawVideo(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawRoundRect(new RectF(w*.15f,h*.25f,w*.65f,h*.75f),dp(3),dp(3),p);Path t=new Path();t.moveTo(w*.65f,h*.35f);t.lineTo(w*.85f,h*.25f);t.lineTo(w*.85f,h*.75f);t.lineTo(w*.65f,h*.65f);c.drawPath(t,p);}
+            void drawStar(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);Path s=new Path();s.moveTo(w*.5f,h*.15f);s.lineTo(w*.61f,h*.38f);s.lineTo(w*.85f,h*.4f);s.lineTo(w*.68f,h*.58f);s.lineTo(w*.73f,h*.85f);s.lineTo(w*.5f,h*.7f);s.lineTo(w*.27f,h*.85f);s.lineTo(w*.32f,h*.58f);s.lineTo(w*.15f,h*.4f);s.lineTo(w*.39f,h*.38f);s.close();c.drawPath(s,p);}
+            void drawTrash(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawLine(w*.25f,h*.28f,w*.75f,h*.28f,p);c.drawRoundRect(new RectF(w*.28f,h*.28f,w*.72f,h*.85f),dp(2),dp(2),p);c.drawLine(w*.4f,h*.2f,w*.6f,h*.2f,p);c.drawLine(w*.4f,h*.42f,w*.4f,h*.7f,p);c.drawLine(w*.5f,h*.42f,w*.5f,h*.7f,p);c.drawLine(w*.6f,h*.42f,w*.6f,h*.7f,p);}
+            void drawSave(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawRoundRect(new RectF(w*.15f,h*.15f,w*.85f,h*.85f),dp(3),dp(3),p);c.drawRect(w*.3f,h*.15f,w*.7f,h*.4f,p);c.drawLine(w*.3f,h*.55f,w*.7f,h*.55f,p);c.drawLine(w*.3f,h*.65f,w*.55f,h*.65f,p);}
+            void drawLink(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawRoundRect(new RectF(w*.1f,h*.35f,w*.5f,h*.65f),dp(8),dp(8),p);c.drawRoundRect(new RectF(w*.5f,h*.35f,w*.9f,h*.65f),dp(8),dp(8),p);c.drawLine(w*.35f,h*.5f,w*.65f,h*.5f,p);}
+            void drawEye(Canvas c,int w,int h,boolean open){p.setStyle(Paint.Style.STROKE);Path e=new Path();e.moveTo(w*.1f,h*.5f);e.quadTo(w*.5f,open?h*.15f:h*.5f,w*.9f,h*.5f);e.quadTo(w*.5f,open?h*.85f:h*.5f,w*.1f,h*.5f);c.drawPath(e,p);if(open)c.drawCircle(w*.5f,h*.5f,w*.12f,p);else c.drawLine(w*.2f,h*.2f,w*.8f,h*.8f,p);}
+            void drawMoon(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);Path m=new Path();m.addArc(new RectF(w*.2f,h*.15f,w*.8f,h*.85f),40,280);m.quadTo(w*.55f,h*.5f,w*.5f,h*.3f);c.drawPath(m,p);}
+            void drawZap(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);Path z=new Path();z.moveTo(w*.6f,h*.1f);z.lineTo(w*.35f,h*.5f);z.lineTo(w*.55f,h*.5f);z.lineTo(w*.4f,h*.9f);z.lineTo(w*.65f,h*.5f);z.lineTo(w*.45f,h*.5f);z.close();c.drawPath(z,p);}
+            void drawFilter(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawLine(w*.15f,h*.25f,w*.85f,h*.25f,p);c.drawLine(w*.25f,h*.5f,w*.75f,h*.5f,p);c.drawLine(w*.35f,h*.75f,w*.65f,h*.75f,p);}
+            void drawLayers(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);Path l1=new Path();l1.moveTo(w*.1f,h*.5f);l1.lineTo(w*.5f,h*.3f);l1.lineTo(w*.9f,h*.5f);l1.lineTo(w*.5f,h*.7f);l1.close();c.drawPath(l1,p);c.drawLine(w*.1f,h*.6f,w*.5f,h*.8f,p);c.drawLine(w*.9f,h*.6f,w*.5f,h*.8f,p);}
+            void drawStats(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawLine(w*.25f,h*.8f,w*.25f,h*.4f,p);c.drawLine(w*.45f,h*.8f,w*.45f,h*.25f,p);c.drawLine(w*.65f,h*.8f,w*.65f,h*.55f,p);c.drawLine(w*.85f,h*.8f,w*.85f,h*.35f,p);c.drawLine(w*.15f,h*.85f,w*.9f,h*.85f,p);}
+            void drawUser(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawCircle(w*.5f,h*.32f,w*.18f,p);Path b=new Path();b.moveTo(w*.18f,h*.88f);b.quadTo(w*.18f,h*.55f,w*.5f,h*.55f);b.quadTo(w*.82f,h*.55f,w*.82f,h*.88f);c.drawPath(b,p);}
+            void drawWarning(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);Path t=new Path();t.moveTo(w*.5f,h*.12f);t.lineTo(w*.88f,h*.85f);t.lineTo(w*.12f,h*.85f);t.close();c.drawPath(t,p);p.setStyle(Paint.Style.FILL);c.drawCircle(w*.5f,h*.7f,dp(3),p);p.setStyle(Paint.Style.STROKE);c.drawLine(w*.5f,h*.38f,w*.5f,h*.58f,p);}
+            void drawBlock(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawCircle(w*.5f,h*.5f,w*.38f,p);c.drawLine(w*.27f,h*.27f,w*.73f,h*.73f,p);}
+            void drawMic(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawRoundRect(new RectF(w*.35f,h*.15f,w*.65f,h*.55f),dp(8),dp(8),p);c.drawLine(w*.5f,h*.65f,w*.5f,h*.85f,p);c.drawLine(w*.35f,h*.85f,w*.65f,h*.85f,p);Path arc=new Path();arc.addArc(new RectF(w*.25f,h*.35f,w*.75f,h*.75f),0,180);c.drawPath(arc,p);}
+            void drawPrint(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawRoundRect(new RectF(w*.15f,h*.35f,w*.85f,h*.7f),dp(3),dp(3),p);c.drawRect(w*.25f,h*.15f,w*.75f,h*.35f,p);c.drawRect(w*.25f,h*.55f,w*.75f,h*.85f,p);}
+            void drawCamera(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);c.drawRoundRect(new RectF(w*.12f,h*.28f,w*.88f,h*.78f),dp(4),dp(4),p);c.drawCircle(w*.5f,h*.53f,w*.18f,p);Path lens=new Path();lens.moveTo(w*.35f,h*.28f);lens.lineTo(w*.4f,h*.18f);lens.lineTo(w*.6f,h*.18f);lens.lineTo(w*.65f,h*.28f);c.drawPath(lens,p);}
+            void drawTranslate(Canvas c,int w,int h){p.setStyle(Paint.Style.STROKE);p.setTextSize(w*.28f);p.setTextAlign(Paint.Align.CENTER);c.drawText("A",w*.32f,h*.45f,p);c.drawText("文",w*.68f,h*.75f,p);p.setStyle(Paint.Style.STROKE);c.drawLine(w*.3f,h*.55f,w*.7f,h*.55f,p);Path arr=new Path();arr.moveTo(w*.55f,h*.5f);arr.lineTo(w*.7f,h*.55f);arr.lineTo(w*.55f,h*.6f);c.drawPath(arr,p);}
+            public void setAlpha(int a){p.setAlpha(a);}
+            public void setColorFilter(ColorFilter f){p.setColorFilter(f);}
+            public int getOpacity(){return PixelFormat.TRANSLUCENT;}
+        };
+    }
+
+    // ========== BEAR GAME ==========
+    
+    private class BearGame extends View {
+        Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);float bearY,bearVel,groundY;boolean jumping,over,started;int score;float speed=8f;ArrayList<Float> rocks=new ArrayList<>();long lastRock;Handler gh=new Handler();Runnable loop;
+        BearGame(Context ctx){super(ctx);setBackgroundColor(0xFF1a1a2e);init();}
+        void init(){groundY=bearY=bearVel=0;rocks.clear();score=0;speed=8f;over=started=false;loop=()->{if(!over&&started){update();invalidate();gh.postDelayed(loop,16);}};}
+        @Override protected void onSizeChanged(int w,int h,int ow,int oh){super.onSizeChanged(w,h,ow,oh);groundY=h-dp(100);bearY=groundY;}
+        void update(){if(jumping||bearY<groundY){bearVel+=1.5f;bearY+=bearVel;if(bearY>=groundY){bearY=groundY;bearVel=0;jumping=false;}}long now=System.currentTimeMillis();if(now-lastRock>(1500-Math.min(score*10,800))){rocks.add((float)getWidth());lastRock=now;}for(int i=rocks.size()-1;i>=0;i--){rocks.set(i,rocks.get(i)-speed);if(rocks.get(i)<-dp(60)){rocks.remove(i);score++;if(score%5==0)speed+=0.5f;}}float bx=dp(80),bw=dp(70);for(float rx:rocks){if(bx+bw>rx+dp(5)&&bx<rx+dp(30)-dp(5)&&bearY>groundY-dp(40)+dp(5)){over=true;if(score>highScore){highScore=score;save();}vib();}}}
+        @Override protected void onDraw(Canvas c){try{super.onDraw(c);int w=getWidth(),h=getHeight();paint.setShader(new LinearGradient(0,0,0,groundY,new int[]{0xFF0f0f23,0xFF1a1a2e,0xFF16213e},null,Shader.TileMode.CLAMP));c.drawRect(0,0,w,groundY,paint);paint.setShader(null);paint.setColor(0xFFFFFFFF);for(int i=0;i<30;i++){float sx=(i*137+50)%w,sy=(i*89+30)%(int)(groundY-50);paint.setAlpha(i%2==0?255:150);c.drawCircle(sx,sy,i%3==0?2f:1f,paint);}paint.setAlpha(255);paint.setColor(0xFFFFFACD);c.drawCircle(w-dp(60),dp(60),dp(25),paint);paint.setColor(0xFF3d3d3d);c.drawRect(0,groundY,w,h,paint);paint.setColor(0xFFFFD700);float dash=(System.currentTimeMillis()/50)%dp(60);for(float x=-dash;x<w;x+=dp(60))c.drawRect(x,groundY+dp(25),x+dp(30),groundY+dp(30),paint);for(float rx:rocks)drawRock(c,rx,groundY);drawBear(c,dp(80),bearY);paint.setColor(0xFFFFFFFF);paint.setTextSize(dp(20));paint.setTextAlign(Paint.Align.LEFT);c.drawText(Strings.score+": "+score,dp(20),dp(40),paint);paint.setTextAlign(Paint.Align.RIGHT);c.drawText(Strings.best+": "+highScore,w-dp(20),dp(40),paint);if(!started)drawOverlay(c,w,h,Strings.bearRider,Strings.noInternet,cPrimary);else if(over)drawOverlay(c,w,h,Strings.gameOver,Strings.score+": "+score,0xFFEF4444);}catch(Exception e){}}
+        void drawOverlay(Canvas c,int w,int h,String t1,String t2,int col){paint.setColor(0x90000000);c.drawRect(0,0,w,h,paint);paint.setColor(col);paint.setTextSize(dp(28));paint.setTextAlign(Paint.Align.CENTER);c.drawText(t1,w/2f,h/2f-dp(20),paint);paint.setColor(0xFFAAAAAA);paint.setTextSize(dp(16));c.drawText(t2,w/2f,h/2f+dp(20),paint);paint.setColor(0xFF10B981);paint.setTextSize(dp(14));c.drawText(over?Strings.tapToRetry:Strings.tapToStart,w/2f,h/2f+dp(60),paint);}
+        void drawBear(Canvas c,float x,float y){paint.setColor(0xFF1a1a1a);c.drawCircle(x-dp(15),y-dp(12),dp(14),paint);c.drawCircle(x+dp(25),y-dp(12),dp(14),paint);paint.setColor(0xFFCC0000);Path f=new Path();f.moveTo(x-dp(15),y-dp(15));f.lineTo(x+dp(5),y-dp(30));f.lineTo(x+dp(20),y-dp(25));f.lineTo(x+dp(25),y-dp(15));f.close();c.drawPath(f,paint);paint.setColor(0xFF8B4513);c.drawOval(new RectF(x-dp(8),y-dp(60),x+dp(12),y-dp(35)),paint);c.drawCircle(x+dp(2),y-dp(70),dp(14),paint);c.drawCircle(x-dp(8),y-dp(80),dp(6),paint);c.drawCircle(x+dp(12),y-dp(80),dp(6),paint);paint.setColor(0xFFDEB887);c.drawOval(new RectF(x-dp(4),y-dp(68),x+dp(8),y-dp(58)),paint);paint.setColor(0xFF000000);c.drawCircle(x-dp(4),y-dp(72),dp(3),paint);c.drawCircle(x+dp(8),y-dp(72),dp(3),paint);}
+        void drawRock(Canvas c,float x,float y){paint.setColor(0xFF696969);Path r=new Path();r.moveTo(x,y);r.lineTo(x+dp(12),y-dp(40));r.lineTo(x+dp(20),y-dp(38));r.lineTo(x+dp(30),y);r.close();c.drawPath(r,paint);}
+        @Override public boolean onTouchEvent(MotionEvent e){try{if(e.getAction()==MotionEvent.ACTION_DOWN){if(!started){started=true;gh.post(loop);}else if(over){init();groundY=getHeight()-dp(100);bearY=groundY;started=true;gh.post(loop);}else if(!jumping&&bearY>=groundY-1){jumping=true;bearVel=-22f;vib();}return true;}}catch(Exception ex){}return super.onTouchEvent(e);}
+        void stop(){try{gh.removeCallbacks(loop);}catch(Exception e){}}
+    }
+    
+    private void showOfflineGame(){try{if(bearGame!=null){content.removeView(bearGame);bearGame.stop();}bearGame=new BearGame(this);bearGame.setLayoutParams(new FrameLayout.LayoutParams(-1,-1));content.addView(bearGame);Tab t=tab();if(t!=null){if(t.home&&homeView!=null)homeView.setVisibility(View.GONE);else if(t.wv!=null)t.wv.setVisibility(View.GONE);}}catch(Exception e){}}
+    private void hideOfflineGame(){try{if(bearGame!=null){bearGame.stop();content.removeView(bearGame);bearGame=null;}Tab t=tab();if(t!=null){if(t.home&&homeView!=null)homeView.setVisibility(View.VISIBLE);else if(t.wv!=null)t.wv.setVisibility(View.VISIBLE);}}catch(Exception e){}}
+
+    // ========== DATA CLASSES ==========
+
+    private class Tab{int id;WebView wv;LinearLayout tab;TextView tt;ImageView favicon;String url,title;boolean home;Tab(int i,WebView w,LinearLayout t,TextView tv,ImageView f,String u,String ti,boolean h){id=i;wv=w;tab=t;tt=tv;favicon=f;url=u;title=ti;home=h;}}
+    private class HistoryItem{String url,title;long time;HistoryItem(String u,String t,long tm){url=u;title=t;time=tm;}}
+    private class SavedPassword{String domain,username,password;SavedPassword(String d,String u,String p){domain=d;username=u;password=p;}}
+    private class DownloadItem{String name,path;long size,time;DownloadItem(String n,String p,long s,long t){name=n;path=p;size=s;time=t;}}
+    private interface Tog{void t(boolean b);}
+
+    // ========== LIFECYCLE ==========
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        try { fullscreen(); } catch (Exception e) {}
+    }
+
+    @Override
+    protected void onActivityResult(int req, int res, Intent data) {
+        try {
+            super.onActivityResult(req, res, data);
+            if (req == REQUEST_FILE && uploadCallback != null) {
+                Uri[] r = null;
+                if (res == RESULT_OK && data != null) {
+                    String dataString = data.getDataString();
+                    if (dataString != null) {
+                        r = new Uri[]{Uri.parse(dataString)};
+                    }
+                }
+                uploadCallback.onReceiveValue(r);
+                uploadCallback = null;
+            } else if (req == REQUEST_VOICE && res == RESULT_OK && data != null) {
+                ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (results != null && !results.isEmpty()) {
+                    String query = results.get(0);
+                    if (query != null && !query.isEmpty()) {
+                        search(query);
+                    }
+                }
+            }
+        } catch (Exception e) {}
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        try {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (requestCode == REQUEST_PERMISSIONS) {
+                    toast("Разрешение получено");
+                } else if (requestCode == REQUEST_AUDIO) {
+                    startVoiceSearch();
+                }
+            }
+        } catch (Exception e) {}
+    }
+
+    @Override
+    public void onBackPressed() {
+        try {
+            if (bearGame != null) { hideOfflineGame(); return; }
+            if (customView != null && customViewCallback != null) {
+                customViewCallback.onCustomViewHidden();
+                if (fullscreenContainer != null) {
+                    fullscreenContainer.removeView(customView);
+                    fullscreenContainer.setVisibility(View.GONE);
+                }
+                if (mainLayout != null) mainLayout.setVisibility(View.VISIBLE);
+                customView = null;
+                customViewCallback = null;
+                isFullscreen = false;
+                fullscreen();
+                return;
+            }
+            if (findBar != null && findBar.getVisibility() == View.VISIBLE) { closeFindBar(); return; }
+            if (suggestions != null && suggestions.getVisibility() == View.VISIBLE) { hideSuggestions(); return; }
+            if (dialog != null && dialog.getVisibility() == View.VISIBLE) { closeDialog(); return; }
+            Tab t = tab();
+            if (t != null && t.wv != null && t.wv.canGoBack()) { t.wv.goBack(); return; }
+            if (t != null && !t.home) { goHome(); return; }
+            if (confirmExit) {
+                long now = System.currentTimeMillis();
+                if (now - lastBackPress < 2000) super.onBackPressed();
+                else { lastBackPress = now; toast(Strings.pressBackToExit); }
+            } else super.onBackPressed();
+        } catch (Exception e) { super.onBackPressed(); }
+    }
+
+    @Override 
+    public void onWindowFocusChanged(boolean f) { 
+        super.onWindowFocusChanged(f); 
+        if (f) fullscreen(); 
+    }
+
+    @Override 
+    protected void onResume() { 
+        super.onResume();
+        try {
+            sessionStartTime = System.currentTimeMillis();
+            for (Tab t : tabs) {
+                if (t.wv != null && t.id == currentTab) {
+                    try { t.wv.onResume(); } catch (Exception e) {}
+                }
+            }
+            fullscreen();
+        } catch (Exception e) {}
+    }
+
+    @Override 
+    protected void onPause() { 
+        super.onPause();
+        try {
+            save();
+            for (Tab t : tabs) {
+                if (t.wv != null) {
+                    try { t.wv.onPause(); } catch (Exception e) {}
+                }
+            }
+            if (bearGame != null) bearGame.stop();
+        } catch (Exception e) {}
+    }
+
+    @Override 
+    protected void onDestroy() { 
+        super.onDestroy();
+        try {
+            handler.removeCallbacksAndMessages(null);
+            if (bearGame != null) bearGame.stop();
+            for (Tab t : tabs) {
+                if (t.wv != null) {
+                    try {
+                        t.wv.stopLoading();
+                        t.wv.loadUrl("about:blank");
+                        t.wv.clearHistory();
+                        t.wv.clearCache(true);
+                        t.wv.onPause();
+                        t.wv.removeAllViews();
+                        t.wv.destroyDrawingCache();
+                        t.wv.destroy();
+                    } catch (Exception e) {}
+                }
+            }
+            tabs.clear();
+        } catch (Exception e) {}
+    }
+}
